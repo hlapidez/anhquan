@@ -39,4 +39,6 @@ public interface VideoControl extends Control {
 	int getDisplayMode();
 
 	public void setViewPort(int vtop, int vleft, int vbottom, int vright, int ctop, int cleft, int cbottom, int cright);
+	
+	boolean isFullScreen();
 }

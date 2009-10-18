@@ -53,4 +53,8 @@ public class VTVConfig {
 	public boolean isAutoMonitorClipboard(){
 		return config.getBoolean("auto_monitor_clipboard");
 	}
+
+	public String getLuaScriptPath() {
+		return config.getString("vlc_lua_dir");
+	}
 }
