@@ -24,4 +24,8 @@ public interface AudioControl extends Control {
 	
 	void setVolume(int volumne);
 	int getVolume();
+	
+	void volumeUp();
+	void volumeDown();
+	void toggleMute();
 }

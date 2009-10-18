@@ -23,9 +23,13 @@ import de.anhquan.vtv.media.control.AudioControl;
 public class TVAudioControl implements AudioControl {
 
 	Audio audio;
+	private static final int VOL_STEP = 10;
+	private static final int DEFAULT_VOL = 50;
 	 
 	public TVAudioControl(JVLC jvlc, TVPlayer tvPlayer){
 		 audio = new Audio(jvlc);
+		 audio.setMute(false);
+		 audio.setVolume(DEFAULT_VOL);
 	}
 
 	public int getVolume() {
@@ -42,6 +46,33 @@ public class TVAudioControl implements AudioControl {
 
 	public void setMute(boolean mute) {
 		audio.setMute(mute);
+	}
+
+	@Override
+	public void toggleMute() {
+		audio.setMute(!audio.getMute());
+	}
+
+	@Override
+	public void volumeDown() {
+		int next = getVolume() - VOL_STEP;
+		
+		if (next <= 0){
+			next = 0;
+			
+		}
+		setVolume(next);
+	}
+
+	@Override
+	public void volumeUp() {
+		int next = getVolume() + VOL_STEP;
+		
+		if (next >= 100){
+			next = 100;
+			
+		}
+		setVolume(next);
 	}
 
 }

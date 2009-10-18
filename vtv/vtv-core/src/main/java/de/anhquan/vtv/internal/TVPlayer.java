@@ -43,19 +43,18 @@ public class TVPlayer implements MediaPlayerListener, Player {
 
 	public TVPlayer() {
 		
-		String[] vlcArgs = new String[] { "-vvv", "--plugin-path="+VTVConfig.INSTANCE.getVLCPluginPath() };
+		String[] vlcArgs = new String[] { "-vvv", "--plugin-path="+VTVConfig.INSTANCE.getVLCPluginPath()}; 
 		
 		log.info("VLC Options");
 		for (String arg : vlcArgs) {
 			log.info(arg);
-		}
-		
+		}		
 		
 		jvlc = new JVLC(vlcArgs);
 		
-		
 		videoControl = new TVVideoControl(jvlc, this);
 		audioControl = new TVAudioControl(jvlc, this);
+
 		playerState = PlayerState.INIT;
 	}
 
@@ -66,8 +65,6 @@ public class TVPlayer implements MediaPlayerListener, Player {
 	public void play() {
 		if ((playerState == PlayerState.READY) || (playerState == PlayerState.PAUSED)) {
 			mediaPlayer.play();
-			videoControl.setDisplayMode(VideoControl.NORMAL_MODE);
-			audioControl.setMute(false);			
 		}
 	}
 
@@ -106,38 +103,37 @@ public class TVPlayer implements MediaPlayerListener, Player {
 	}
 
 	public void endReached(MediaPlayer mediaPlayer) {
-		// TODO Auto-generated method stub
-
+		log.info("endReached ... ");
+		playerState = PlayerState.READY;
 	}
 
 	public void errorOccurred(MediaPlayer mediaPlayer) {
-		// TODO Auto-generated method stub
+		log.info("errorOccurred ... ");
 
 	}
 
 	public void paused(MediaPlayer mediaPlayer) {
+		log.info("paused ... ");
 		playerState = PlayerState.PAUSED;
 
 	}
 
 	public void playing(MediaPlayer mediaPlayer) {
 		playerState = PlayerState.PLAYING;
-
+		log.info("playing ... ");
 	}
 
 	public void positionChanged(MediaPlayer mediaPlayer) {
-		// TODO Auto-generated method stub
-		
+		log.info("positionChanged ... ");
 	}
 
 	public void stopped(MediaPlayer mediaPlayer) {
-		// TODO Auto-generated method stub
 		playerState = PlayerState.READY;
+		log.info("stopped ... ");
 	}
 
 	public void timeChanged(MediaPlayer mediaPlayer, long newTime) {
-		// TODO Auto-generated method stub
-
+		//log.info("timeChanged ... ");
 	}
 
 	public void addPlayerListener(PlayerListener listener) {
@@ -165,4 +161,5 @@ public class TVPlayer implements MediaPlayerListener, Player {
 	public VideoControl getVideoControl() {
 		return videoControl;
 	}
+
 }

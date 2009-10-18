@@ -86,4 +86,9 @@ public class TVVideoControl implements VideoControl {
 		video.setViewPort(vtop, vleft, vbottom, vright, ctop, cleft, cbottom, cright);
 	}
 
+	@Override
+	public boolean isFullScreen() {
+		return displayMode == FULLSCREEN_MODE;
+	}
+
 }

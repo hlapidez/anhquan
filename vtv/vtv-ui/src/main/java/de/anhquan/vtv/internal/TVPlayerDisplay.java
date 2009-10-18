@@ -19,8 +19,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
@@ -33,14 +31,13 @@ import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.anhquan.vtv.internal.TVPlayer;
 import de.anhquan.vtv.media.Player;
 import de.anhquan.vtv.media.PlayerEvent;
 import de.anhquan.vtv.media.PlayerListener;
 import de.anhquan.vtv.media.PlayerState;
 import de.anhquan.vtv.media.control.VideoControl;
 
-public class TVPlayerDisplay extends ControlAdapter implements MouseListener, PlayerListener, KeyListener {
+public class TVPlayerDisplay implements MouseListener, PlayerListener, KeyListener {
 
 	private Logger log = LoggerFactory.getLogger(TVPlayerDisplay.class);
 
@@ -52,13 +49,12 @@ public class TVPlayerDisplay extends ControlAdapter implements MouseListener, Pl
 	Composite videoPlane;
 
 	String currentURL;
-
-	// http://www.youtube.com/get_video?video_id=z3Iq6lazrMA&t=vjVQa1PpcFMvZUe7ue1QfcS_mQSiZNcJEC2SQt4EktE%3D&fmt=18
+	
 	public TVPlayerDisplay(TVPlayer player) {
 		this.player = player;
 		display = new Display();
 		shell = new Shell(display, SWT.CLOSE | SWT.MIN | SWT.MAX | SWT.RESIZE | SWT.TITLE | SWT.ON_TOP);
-		
+
 		shell.setImage(new Image(display, "resources/icon.png"));
 		shell.setSize(320, 240);
 		shell.setText("ViTV - ver1.0");
@@ -69,12 +65,10 @@ public class TVPlayerDisplay extends ControlAdapter implements MouseListener, Pl
 		player.setVideoOutput(videoPlane.handle);
 
 		clipboard = new Clipboard(display);
-		
+
 		videoPlane.addKeyListener(this);
 
 		videoPlane.addMouseListener(this);
-
-		shell.addControlListener(this);
 		
 	}
 
@@ -90,21 +84,11 @@ public class TVPlayerDisplay extends ControlAdapter implements MouseListener, Pl
 		display.dispose();
 	}
 
-	public void controlResized(ControlEvent evt) {
-		
-		//Rectangle rect = shell.getClientArea();
-		//videoPlane.setBounds(rect);
-		//videoPlane.setSize(rect.width,rect.height);
-		
-		//VideoControl video = player.getVideoControl();
-		//video.setViewPort(rect.y, rect.x, rect.height, rect.width, rect.y, rect.x, rect.height, rect.width);
-	}
-
 	public void mouseDoubleClick(MouseEvent evt) {
 	}
 
 	public void mouseDown(MouseEvent e) {
-		
+
 	}
 
 	public void mouseUp(MouseEvent evt) {
@@ -120,24 +104,40 @@ public class TVPlayerDisplay extends ControlAdapter implements MouseListener, Pl
 	}
 
 	public void keyReleased(KeyEvent evt) {
-		log.debug("keyReleased");
-		log.debug("CODE. " + evt.keyCode);
-		log.debug("char. " + evt.character);
-		boolean ctrlPressed = (evt.stateMask & SWT.CTRL) != 0;
-
-		// if (!altPressed)
-		// return;
 
 		switch (evt.keyCode) {
-		case SWT.F5:
-			playFromClipboard();
-			break;
-
-		case SWT.ESC:
-			log.debug("Close window ");
-			shell.close();
-			break;
-
+			
+			case SWT.F2:
+				player.getAudioControl().toggleMute();
+			
+			case SWT.F3:
+				player.getAudioControl().volumeDown();
+				break;
+				
+			case SWT.F4:
+				player.getAudioControl().volumeUp();
+				break;
+		
+			case SWT.F5:
+				playFromClipboard();
+				break;
+				
+			case SWT.F6:
+				playOrPause();
+				break;
+				
+			case SWT.F7:
+				player.stop();
+				break;
+				
+			case SWT.F11:
+				player.getVideoControl().setDisplayMode(VideoControl.FULLSCREEN_MODE);
+				break;
+				
+			case SWT.ESC:
+				log.debug("Close window ");
+				shell.close();
+				break;
 		}
 	}
 
@@ -146,7 +146,7 @@ public class TVPlayerDisplay extends ControlAdapter implements MouseListener, Pl
 		TextTransfer transfer = TextTransfer.getInstance();
 		String data = (String) clipboard.getContents(transfer);
 
-		if ((data!= null) && (data.matches("http://\\S+"))) {
+		if ((data != null) && (data.matches("http://\\S+"))) {
 			playFromURL(data);
 		} else
 			log.warn("Invalid URL in the clipboard : " + data);
@@ -157,17 +157,21 @@ public class TVPlayerDisplay extends ControlAdapter implements MouseListener, Pl
 			currentURL = url;
 			player.openMedia(url);
 			player.play();
-			player.getVideoControl().setDisplayMode(VideoControl.FULLSCREEN_MODE);
-		} else
-			log.warn("The new URL is the same the current playing URL. DO NOTHING");
+		} else {
+			playOrPause();
+		}
 	}
 
 	void playOrPause() {
-		log.debug("try to play or pause...");
+		log.debug("try to play or pause. PlaerState = "+player.getState());
 		if (player.getState() == PlayerState.PLAYING)
 			player.pause();
 		else if (player.getState() == PlayerState.PAUSED)
 			player.play();
+		else if (player.getState() == PlayerState.READY){
+			player.rewind();
+			player.play();
+		}
 	}
 
 	public void showError(String msg) {
