@@ -5,6 +5,9 @@
 	<artifactId>vtv</artifactId>
 	<packaging>pom</packaging>
 	<version>0.0.1-SNAPSHOT</version>
+	<inceptionYear>2009</inceptionYear>
+	<name>VTV2009</name>
+	<description>Watch Videos Online</description>
 	<modules>
 		<module>vtv-core</module>
 		<module>vtv-ui</module>
@@ -35,6 +38,7 @@
 			<plugin>
 				<groupId>com.google.code.maven-license-plugin</groupId>
 				<artifactId>maven-license-plugin</artifactId>
+				<version>1.4.0</version>
 				<configuration>
 					<header>src/etc/header.tpl</header>
 					<properties>
@@ -43,6 +47,11 @@
 						<email>nguyen.anhquan@gmail.com</email>
 						<author>Anh Quan Nguyen</author>
 					</properties>
+					<excludes>
+						<exclude>**/target/**</exclude>
+						<exclude>**/org/videolan/**</exclude>
+					</excludes>
+					<useDefaultExcludes>true</useDefaultExcludes>
 				</configuration>
 				<executions>
 					<execution>
