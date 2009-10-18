@@ -22,6 +22,7 @@ import org.videolan.jvlc.MediaDescriptor;
 import org.videolan.jvlc.MediaPlayer;
 import org.videolan.jvlc.event.MediaPlayerListener;
 
+import de.anhquan.vtv.VTVConfig;
 import de.anhquan.vtv.media.Player;
 import de.anhquan.vtv.media.PlayerListener;
 import de.anhquan.vtv.media.PlayerState;
@@ -41,8 +42,18 @@ public class TVPlayer implements MediaPlayerListener, Player {
 	TVAudioControl audioControl = null;
 
 	public TVPlayer() {
-		String[] vlcArgs = new String[] { "-vvv", "--plugin-path=external\\vlc_exec\\plugins" };
+		
+		String[] vlcArgs = new String[] { "-vvv", "--plugin-path="+VTVConfig.INSTANCE.getVLCPluginPath() };
+		
+		log.info("VLC Options");
+		for (String arg : vlcArgs) {
+			log.info(arg);
+		}
+		
+		
 		jvlc = new JVLC(vlcArgs);
+		
+		
 		videoControl = new TVVideoControl(jvlc, this);
 		audioControl = new TVAudioControl(jvlc, this);
 		playerState = PlayerState.INIT;
@@ -55,7 +66,6 @@ public class TVPlayer implements MediaPlayerListener, Player {
 	public void play() {
 		if ((playerState == PlayerState.READY) || (playerState == PlayerState.PAUSED)) {
 			mediaPlayer.play();
-			playerState = PlayerState.PLAYING;
 			videoControl.setDisplayMode(VideoControl.NORMAL_MODE);
 			audioControl.setMute(false);			
 		}
@@ -65,7 +75,7 @@ public class TVPlayer implements MediaPlayerListener, Player {
 	public void pause() {
 		if ((playerState == PlayerState.READY) || (playerState == PlayerState.PLAYING)) {
 			mediaPlayer.pause();
-			playerState = PlayerState.PAUSED;
+			
 		}
 	}
 
@@ -80,7 +90,6 @@ public class TVPlayer implements MediaPlayerListener, Player {
 	public void stop() {
 		if ((playerState == PlayerState.PAUSED) || (playerState == PlayerState.PLAYING)) {
 			mediaPlayer.stop();
-			playerState = PlayerState.READY;
 		}
 	}
 
@@ -93,8 +102,7 @@ public class TVPlayer implements MediaPlayerListener, Player {
 	}
 
 	public void reset() {
-		stop();
-		playerState = PlayerState.READY;
+		stop();		
 	}
 
 	public void endReached(MediaPlayer mediaPlayer) {
@@ -108,23 +116,23 @@ public class TVPlayer implements MediaPlayerListener, Player {
 	}
 
 	public void paused(MediaPlayer mediaPlayer) {
-		// TODO Auto-generated method stub
+		playerState = PlayerState.PAUSED;
 
 	}
 
 	public void playing(MediaPlayer mediaPlayer) {
-		// TODO Auto-generated method stub
+		playerState = PlayerState.PLAYING;
 
 	}
 
 	public void positionChanged(MediaPlayer mediaPlayer) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	public void stopped(MediaPlayer mediaPlayer) {
 		// TODO Auto-generated method stub
-
+		playerState = PlayerState.READY;
 	}
 
 	public void timeChanged(MediaPlayer mediaPlayer, long newTime) {

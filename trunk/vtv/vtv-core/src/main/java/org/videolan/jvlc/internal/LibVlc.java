@@ -29,17 +29,18 @@ import com.sun.jna.Callback;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLong;
-import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
 import com.sun.jna.PointerType;
 import com.sun.jna.Structure;
 import com.sun.jna.Union;
 
+import de.anhquan.vtv.VTVConfig;
+
 
 public interface LibVlc extends Library
 {
 
-	LibVlc INSTANCE = (LibVlc) Native.loadLibrary(Platform.isWindows()? ".\\external\\vlc_exec\\libvlc" : "vlc", LibVlc.class);
+	LibVlc INSTANCE = (LibVlc) Native.loadLibrary(VTVConfig.INSTANCE.getVLCLibraryPath(), LibVlc.class);
 
     LibVlc SYNC_INSTANCE = (LibVlc) Native.synchronizedLibrary(INSTANCE);
     
