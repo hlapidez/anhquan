@@ -41,7 +41,7 @@ public class TVPlayer implements MediaPlayerListener, Player {
 	TVAudioControl audioControl = null;
 
 	public TVPlayer() {
-		String[] vlcArgs = new String[] { "-vvv", "--plugin-path=vlc_exec\\plugins" };
+		String[] vlcArgs = new String[] { "-vvv", "--plugin-path=external\\vlc_exec\\plugins" };
 		jvlc = new JVLC(vlcArgs);
 		videoControl = new TVVideoControl(jvlc, this);
 		audioControl = new TVAudioControl(jvlc, this);
