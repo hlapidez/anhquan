@@ -11,7 +11,16 @@ public class ShoppingCartTest {
 	public void testSave(){
 		Order entry = new Order();
 		entry.setCategory("iPod");
-		entry.setName("iPod-nano-3g");
+		entry.setName("iPod-nano-32222g");
+		entry.setDescription("Third Generation iPod Nano Flash 8GB");
+		ShoppingCart.save(entry);
+		
+		ShoppingCart.deleteAll();
+		ShoppingCart.delete("iPod-nano-32222g");
+		
+		entry = new Order();
+		entry.setCategory("iPod");
+		entry.setName("iPod-nano-32g");
 		entry.setDescription("Third Generation iPod Nano Flash 8GB");
 		ShoppingCart.save(entry);
 		
