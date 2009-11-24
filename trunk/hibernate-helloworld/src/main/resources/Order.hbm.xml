@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="de.anhquan.demo.hibernate.helloworld.Order" table="ORDER_TBL">
+        <id name="id" column="ID">
+            <generator class="native"/>
+        </id>
+        <property name="name" column="ORDER_NAME"/>
+        <property name="description" column="ORDER_DESC"/>
+        <property name="category" column="ORDER_CAT"/>
+    </class>
+</hibernate-mapping>
