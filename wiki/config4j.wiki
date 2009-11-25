@@ -28,7 +28,15 @@ public interface AppConfig extends Config{
 }
 }}}
 
-=== 2) Using the Config everywhere by calling ConfigFactory.getConfig (...)===
+=== 2) Create a property file (app.properties) to store the configuration ===
+{{{
+#### Configuration File ####
+app.bind.port=8080
+app.database.host=localhost
+app.database.port=1234
+}}}
+
+=== 3) Using the Config everywhere by calling ConfigFactory.getConfig (...)===
 {{{
 //MyApp.java
 import de.anhquan.config4j.AppConfig;
