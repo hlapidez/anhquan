@@ -1,0 +1,152 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>de.anhquan.config4j</groupId>
+	<artifactId>config4j</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<url>http://anhquan.de</url>
+	<inceptionYear>2009</inceptionYear>
+	<name>config4j</name>
+	<description>Easy Configuration for Java</description>
+
+	<repositories>
+		<repository>
+			<id>mc-release</id>
+			<name>Local Maven repository of
+			releases</name>
+			<url>http://mc-repo.googlecode.com/svn/maven2/releases</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+	</repositories>
+
+	<build>
+
+		<defaultGoal>install</defaultGoal>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>true</downloadJavadocs>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<inherited>true</inherited>
+				<groupId>com.mycila.maven-license-plugin</groupId>
+				<artifactId>maven-license-plugin</artifactId>
+				<version>1.5.0</version>
+				<configuration>
+					<header>src/etc/license.tpl</header>
+					<aggregate>true</aggregate>
+					<quiet>true</quiet>
+					<properties>
+						<year>${project.inceptionYear}</year>
+						<projectName>${project.name}</projectName>
+						<organization>http://anhquan.de</organization>
+						<email>nguyen.anhquan@gmail.com</email>
+						<author>Anh Quan Nguyen</author>
+					</properties>
+
+					<encoding>UTF-8</encoding>
+					<excludes>
+						<exclude>LICENSE.txt</exclude>
+						<exclude>**/*.cmd</exclude>
+						<exclude>**/distribution/**</exclude>
+						<exclude>**/src/test/resources/**</exclude>
+						<exclude>**/src/test/conf/**</exclude>
+						<exclude>**/src/main/database/**</exclude>
+						<exclude>**/src/main/resources/**</exclude>
+						<exclude>**/src/main/conf/**</exclude>
+						<exclude>**/src/script/**</exclude>
+						<exclude>**/src/license/**</exclude>
+						<exclude>**/src/*.xml</exclude>
+						<exclude>**/src/*.properties</exclude>
+						<exclude>**/src/etc/**</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<id>format-license</id>
+						<phase>package</phase>
+						<goals>
+							<goal>format</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.1.2</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.4.2</version>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
+			</plugin>
+
+
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+			<version>1.6</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.7</version>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.15</version>
+			<type>jar</type>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.1</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
+			<type>jar</type>
+			<classifier>javadoc</classifier>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
+</project>
