@@ -25,10 +25,9 @@
     		<element name="Name" type="string" minOccurs="1"></element>
     		<element name="Package" type="string" minOccurs="1"></element>
     		<element name="Template" type="string" minOccurs="1"></element>
+    		<element name="PrimaryKeyType" type="string" minOccurs="1"></element>
     	</sequence>
     </complexType>
-
-
 
     <complexType name="ClassTableType">
     	<sequence>

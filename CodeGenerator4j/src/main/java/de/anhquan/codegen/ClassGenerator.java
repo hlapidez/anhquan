@@ -21,9 +21,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -35,9 +32,8 @@ import org.slf4j.LoggerFactory;
 
 import de.anhquan.codegen.model.ClassDescriptionType;
 import de.anhquan.codegen.model.ClassTableType;
-import de.anhquan.codegen.util.JAXBPool;
 
-public class ClassGenerator {
+public abstract class ClassGenerator {
 
 	final static Logger log = LoggerFactory.getLogger(ClassGenerator.class);
 
@@ -60,7 +56,7 @@ public class ClassGenerator {
 		return ctx;
 	}
 
-	public void generate(String template, String dest, String className)
+	protected void generate(String template, String dest, String className)
 			throws IOException {
 
 		File dir = new File(dest);
@@ -75,7 +71,7 @@ public class ClassGenerator {
 		log.info("New file '" + filePath + "' has been genereated!");
 	}
 
-	public void generate(String template, Writer writer) {
+	protected void generate(String template, Writer writer) {
 		Template t;
 		try {
 			t = Velocity.getTemplate(template);
@@ -89,50 +85,44 @@ public class ClassGenerator {
 		}
 	}
 
-	public void generateFrom(String classDefinitionFile) {
+	protected void generate(ClassTableType tbl){
+		if (tbl == null) 
+			throw new IllegalArgumentException("ClassTableType cannot be NULL");
+		
+		List<ClassDescriptionType> classes = tbl.getClassDescriptions();
 
-		File f = new File(classDefinitionFile);
+		String targetDir = tbl.getTargetDirectory();
 
-		javax.xml.bind.Unmarshaller unmarshaller = JAXBPool.JAXB_UNMARSHALLER;
-		try {
-			@SuppressWarnings("unchecked")
-			JAXBElement<ClassTableType> rootElement = (JAXBElement<ClassTableType>) unmarshaller
-					.unmarshal(f);
-			ClassTableType tbl = rootElement.getValue();
-			if (tbl != null) {
-				List<ClassDescriptionType> classes = tbl.getClassDescriptions();
+		for (ClassDescriptionType cls : classes) {
+			ctx.put(CLASS, cls);
+			ctx.put(CLASS_TABLE, tbl);
 
-				String targetDir = tbl.getTargetDirectory();
+			String template = cls.getTemplate();
+			if (template == null) {
+				log.warn("Template to generate class "+cls.getName()+" has not been found. SKIP IT");
+				continue;
+			}
+			String className = cls.getName();
+			if (!StringUtils.isEmpty(className)) {
+				log.info("Generating class '" + cls.getName()+"'");
+				String packageName = cls.getPackage();
 
-				for (ClassDescriptionType cls : classes) {
+				String targetPackageDir = StringUtils.replaceChars(
+						packageName, ".", "/");
+				String path = targetDir + "/" + targetPackageDir
+						+ "/";
 
-					ctx.put(CLASS, cls);
-					ctx.put(CLASS_TABLE, tbl);
-
-					String template = cls.getTemplate();
-					if (template != null) {
-						String className = cls.getName();
-						if (!StringUtils.isEmpty(className)) {
-							log.info("Generating " + cls.getName());
-							String packageName = cls.getPackage();
-
-							String targetPackageDir = StringUtils.replaceChars(
-									packageName, ".", "/");
-							String path = targetDir + "/" + targetPackageDir
-									+ "/";
-
-							try {
-								generate(template, path, className);
-							} catch (IOException e) {
-								log.error(e.getMessage());
-							}
-						}
-					}
+				try {
+					generate(template, path, className);
+				} catch (IOException e) {
+					log.error(e.getMessage());
 				}
 			}
-
-		} catch (JAXBException e) {
-			log.error(e.getMessage());
+			
 		}
 	}
+
+	public abstract void generate() throws IOException;
+	
+	
 }

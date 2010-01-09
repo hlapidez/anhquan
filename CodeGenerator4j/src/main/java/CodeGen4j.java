@@ -13,14 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import de.anhquan.codegen.ClassGenerator;
+import java.io.IOException;
+
+import de.anhquan.codegen.XMLClassGenerator;
 
 public class CodeGen4j {
 
 	public static void main(String[] args){
 		if (args.length == 1){
-			ClassGenerator gen = new ClassGenerator();
-			gen.generateFrom(args[0]);
+			XMLClassGenerator gen = new XMLClassGenerator();
+			gen.setClassDefinitionFile(args[0]);
+			try {
+				gen.generate();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		else{
 			System.out.println("CodeGenerator4j\n\tSyntax: java CodeGen4j <path/to/model.xml>");

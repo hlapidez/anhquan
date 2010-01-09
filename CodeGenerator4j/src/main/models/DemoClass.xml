@@ -18,13 +18,15 @@
 -->
 <gen:ClassTable Author="Anh Quan Nguyen" License="Apache License Version 2.0" TargetDirectory="src/main/java" xmlns:gen="urn:de:anhquan:codegen:model" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:de:anhquan:codegen:model ../schemas/ClassSchema.xsd ">
   <gen:ClassDescriptions>
-    <gen:Name>HelloWorld</gen:Name>
+    <gen:Name>ImageBlobDao</gen:Name>
     <gen:Package>de.anhquan.demo</gen:Package>
     <gen:Template>src/main/templates/HelloWorld.class.tpl</gen:Template>
+    <gen:PrimaryKeyType>Integer</gen:PrimaryKeyType>
   </gen:ClassDescriptions>
   <gen:ClassDescriptions>
   	<gen:Name>GoodBye</gen:Name>
   	<gen:Package>de.anhquan.demo</gen:Package>
   	<gen:Template>src/main/templates/GoodBye.class.tpl</gen:Template>
+    <gen:PrimaryKeyType>Integer</gen:PrimaryKeyType>
   </gen:ClassDescriptions>
 </gen:ClassTable>

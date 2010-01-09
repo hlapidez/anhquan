@@ -19,13 +19,14 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import de.anhquan.codegen.ClassGenerator;
+import de.anhquan.codegen.XMLClassGenerator;
 
 public class ClassGeneratorTest {
 
 	@Test
 	public void testGenFromXml() throws IOException{
-		ClassGenerator gen = new ClassGenerator();
-		gen.generateFrom("src/main/models/DemoClass.xml");
+		XMLClassGenerator gen = new XMLClassGenerator();
+		gen.setClassDefinitionFile("src/main/models/DemoClass.xml");
+		gen.generate();
 	}
 }
