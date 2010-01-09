@@ -25,11 +25,12 @@ public class DaoClassDescriptiononFormatter implements ClassDescriptionFormatter
 	public ClassDescriptionType format(Table table) {
 		
 		char[] delimiters = new char[]{'_'};
-		String clazzName = WordUtils.capitalizeFully(table.getName(),delimiters );
-		clazzName = StringUtils.remove(clazzName, '_');
-		log.debug("format class : "+clazzName);
+		String entityClassName = WordUtils.capitalizeFully(table.getName(),delimiters );
+		entityClassName = StringUtils.remove(entityClassName, '_');
+		String daoClassName = entityClassName+"Dao";
+		log.debug("format class : "+daoClassName);
 		
-		String primaryKeyType = clazzName+"PK";
+		String primaryKeyType = entityClassName+"PK";
 		PrimaryKey pk = table.getPrimaryKey();
 		if (pk!=null){
 			log.debug("PKNAME = "+pk.getName());
@@ -43,10 +44,11 @@ public class DaoClassDescriptiononFormatter implements ClassDescriptionFormatter
 		}
 		
 		ClassDescriptionType desc = new ClassDescriptionType();
-		desc.setName(clazzName);
+		desc.setName(daoClassName);
 		desc.setPackage(targetPackage);
 		desc.setPrimaryKeyType(primaryKeyType);
 		desc.setTemplate(classTemplate);
+		desc.setEntityClass(entityClassName);
 		return desc;
 	}
 
