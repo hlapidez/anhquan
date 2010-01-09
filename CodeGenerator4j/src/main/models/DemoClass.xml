@@ -22,11 +22,13 @@
     <gen:Package>de.anhquan.demo</gen:Package>
     <gen:Template>src/main/templates/HelloWorld.class.tpl</gen:Template>
     <gen:PrimaryKeyType>Integer</gen:PrimaryKeyType>
+    <gen:EntityClass>HelloWorld</gen:EntityClass>
   </gen:ClassDescriptions>
   <gen:ClassDescriptions>
   	<gen:Name>GoodBye</gen:Name>
   	<gen:Package>de.anhquan.demo</gen:Package>
   	<gen:Template>src/main/templates/GoodBye.class.tpl</gen:Template>
     <gen:PrimaryKeyType>Integer</gen:PrimaryKeyType>
+     <gen:EntityClass>GoodBye</gen:EntityClass>
   </gen:ClassDescriptions>
 </gen:ClassTable>

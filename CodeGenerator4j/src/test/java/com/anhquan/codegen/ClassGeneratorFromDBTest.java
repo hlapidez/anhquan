@@ -32,7 +32,7 @@ public class ClassGeneratorFromDBTest {
 		ApplicationContext context = new ClassPathXmlApplicationContext("application-context.xml");
 		LocalSessionFactoryBean sfb = (LocalSessionFactoryBean) context.getBean("&mySessionFactory");
         
-		DaoClassDescriptiononFormatter formatter = new DaoClassDescriptiononFormatter("src/main/templates/HelloWorld.class.tpl","com.sachvietonline.core.entity");
+		DaoClassDescriptiononFormatter formatter = new DaoClassDescriptiononFormatter("src/main/templates/Dao.class.tpl","com.sachvietonline.core.entity");
 		DBClassGenerator gen = (DBClassGenerator) context.getBean("dbClassGenerator");
 		gen.setLocalSessionFactoryBean(sfb);
 		

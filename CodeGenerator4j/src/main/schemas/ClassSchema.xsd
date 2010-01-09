@@ -26,6 +26,7 @@
     		<element name="Package" type="string" minOccurs="1"></element>
     		<element name="Template" type="string" minOccurs="1"></element>
     		<element name="PrimaryKeyType" type="string" minOccurs="1"></element>
+    		<element name="EntityClass" type="string" minOccurs="1"></element>
     	</sequence>
     </complexType>
 
