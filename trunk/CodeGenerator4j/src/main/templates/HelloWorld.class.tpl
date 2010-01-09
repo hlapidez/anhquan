@@ -5,9 +5,15 @@ package ${CLASS.getPackage()};
  * @author  ${CLASS_TABLE.getAuthor()}
  */
 
-public class ${CLASS.getName()} {
-	
-	public static void main(String[] args){
-		System.out.println("Hello World!");
+import com.sachvietonline.core.entity.${CLASS.getName()};
+
+import de.anhquan.persistent.dao.AbstractDao;
+
+public class ${CLASS.getName()}Dao extends AbstractDao< ${CLASS.getName()},  ${CLASS.getPrimaryKeyType()}> {
+
+	@Override
+	protected Class<${CLASS.getName()}> getEntityClass() {
+		return ${CLASS.getName()}.class;
 	}
+
 }
