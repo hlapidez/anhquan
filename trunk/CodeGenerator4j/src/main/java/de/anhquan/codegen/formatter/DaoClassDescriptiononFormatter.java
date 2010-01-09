@@ -29,7 +29,7 @@ public class DaoClassDescriptiononFormatter implements ClassDescriptionFormatter
 		clazzName = StringUtils.remove(clazzName, '_');
 		log.debug("format class : "+clazzName);
 		
-		String primaryKeyType = clazzName+"Pk";
+		String primaryKeyType = clazzName+"PK";
 		PrimaryKey pk = table.getPrimaryKey();
 		if (pk!=null){
 			log.debug("PKNAME = "+pk.getName());
