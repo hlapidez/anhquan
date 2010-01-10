@@ -15,10 +15,13 @@
  */
 package de.anhquan.codegen;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -60,6 +63,27 @@ public class DBClassGenerator extends ClassGenerator {
 	private String targetDirectory;
 	
 	private ClassDescriptionFormatter classDescriptionFormatter;
+
+	public void setConfigTemplate(String configTemplate) {
+		this.configTemplate = configTemplate;
+	}
+
+	public void setConfigOutputDir(String configOutputDir) {
+		if (!configOutputDir.endsWith("/"))
+			configOutputDir=configOutputDir+"/";
+		
+		this.configOutputDir = configOutputDir;
+	}
+	public void setConfigOutputFileName(String configOutputFileName) {
+		this.configOutputFileName = configOutputFileName;
+	}
+
+	private String configTemplate;
+
+	private String configOutputDir;
+
+	private String configOutputFileName;
+	
 	
 	public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
 		this.hibernateTemplate = hibernateTemplate;
@@ -85,6 +109,7 @@ public class DBClassGenerator extends ClassGenerator {
 		try {
 			ClassTableType tbl = buildClassTable();
 			generate(tbl);
+			generateConfigFile(tbl);
 		} catch (HibernateException e) {
 			log.warn("HibernateException: "+e.getMessage());
 		} catch (SQLException e) {
@@ -92,6 +117,15 @@ public class DBClassGenerator extends ClassGenerator {
 		}
 	}
 	
+	private void generateConfigFile(ClassTableType tbl) {
+		try {
+			ctx.put(CLASS_TABLE, tbl);
+			generate(configTemplate,configOutputDir,configOutputFileName,".xml");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	private ClassTableType buildClassTable() throws HibernateException, SQLException {
 		
 		hibernateTemplate.setFlushMode(HibernateTemplate.FLUSH_NEVER);
@@ -119,9 +153,17 @@ public class DBClassGenerator extends ClassGenerator {
 					
 					Table[] tables = schema.getTables();
 					for (Table table : tables) {
-						ClassDescriptionType desc = classDescriptionFormatter.format(table);
 						
-						classDescriptions.add(desc);
+						if (isExcluded(table)){
+							continue;
+						}
+						
+						ClassDescriptionType desc = classDescriptionFormatter.format(table);
+						if (desc!=null){
+							
+							classDescriptions.add(desc);
+						}
+							
 					}
 					
 					classTable.getClassDescriptions().addAll(classDescriptions);
