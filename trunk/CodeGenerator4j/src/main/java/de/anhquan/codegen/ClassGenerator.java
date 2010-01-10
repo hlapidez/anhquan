@@ -20,6 +20,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
@@ -29,6 +31,8 @@ import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import schemacrawler.schema.Table;
 
 import de.anhquan.codegen.model.ClassDescriptionType;
 import de.anhquan.codegen.model.ClassTableType;
@@ -40,7 +44,10 @@ public abstract class ClassGenerator {
 	public static final String CLASS = "CLASS";
 	public static final String CLASS_TABLE = "CLASS_TABLE";
 	VelocityContext ctx;
-
+	
+	Pattern excludePattern = null;
+	String excludedList;
+	
 	public ClassGenerator() {
 
 		try {
@@ -55,15 +62,34 @@ public abstract class ClassGenerator {
 	public VelocityContext getContext() {
 		return ctx;
 	}
+	
+	public void setExcludedList(String regularExp){
+		this.excludedList = regularExp;
+		excludePattern = Pattern.compile(regularExp);
+	}
+	
+	public String getExcludedList(){
+		return this.excludedList;
+	}
 
-	protected void generate(String template, String dest, String className)
+	protected boolean isExcluded(Table table){
+		if (excludePattern!=null){
+			Matcher matcher = excludePattern.matcher(table.getName());
+			if (matcher.matches()){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	protected void generate(String template, String outputDir, String fileName, String extension)
 			throws IOException {
 
-		File dir = new File(dest);
+		File dir = new File(outputDir);
 		if (!dir.exists()) {
 			dir.mkdirs();
 		}
-		String filePath = dest + className + ".java";
+		String filePath = outputDir + fileName + extension;
 		FileWriter writer = new FileWriter(filePath);
 		generate(template, writer);
 		writer.close();
@@ -113,7 +139,7 @@ public abstract class ClassGenerator {
 						+ "/";
 
 				try {
-					generate(template, path, className);
+					generate(template, path, className,".java");
 				} catch (IOException e) {
 					log.error(e.getMessage());
 				}

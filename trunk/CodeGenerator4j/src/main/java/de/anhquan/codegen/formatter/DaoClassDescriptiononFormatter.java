@@ -5,6 +5,9 @@ import org.apache.commons.lang.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import schemacrawler.schema.Column;
+import schemacrawler.schema.ForeignKey;
+import schemacrawler.schema.ForeignKeyColumnMap;
 import schemacrawler.schema.IndexColumn;
 import schemacrawler.schema.PrimaryKey;
 import schemacrawler.schema.Table;
@@ -49,6 +52,51 @@ public class DaoClassDescriptiononFormatter implements ClassDescriptionFormatter
 		desc.setPrimaryKeyType(primaryKeyType);
 		desc.setTemplate(classTemplate);
 		desc.setEntityClass(entityClassName);
+		
+		
+		log.debug("ForeignKeys of "+table.getName());
+		ForeignKey[] foreignKeys = table.getForeignKeys();
+		for (ForeignKey foreignKey : foreignKeys) {
+			log.debug("--name = "+foreignKey.getName());
+			ForeignKeyColumnMap[] paris = foreignKey.getColumnPairs();
+			for (ForeignKeyColumnMap foreignKeyColumnMap : paris) {
+				log.debug("----foreignKeyColumnMap = "+foreignKeyColumnMap.getName());
+				Column pk1 = foreignKeyColumnMap.getPrimaryKeyColumn();
+				Column fk1 = foreignKeyColumnMap.getForeignKeyColumn();
+				log.debug("------ FK = "+ fk1.getParent().getName()+"."+fk1.getName());
+				log.debug("------ REF TO PK = "+pk1.getParent().getName()+"."+pk1.getName());
+			}
+		}
+		
+		log.debug("ExportedForeignKeys of "+table.getName());
+		ForeignKey[] exportedForeignKeys = table.getExportedForeignKeys();
+		for (ForeignKey foreignKey : exportedForeignKeys) {
+			log.debug("--name = "+foreignKey.getName());
+			ForeignKeyColumnMap[] paris = foreignKey.getColumnPairs();
+			for (ForeignKeyColumnMap foreignKeyColumnMap : paris) {
+				log.debug("----foreignKeyColumnMap = "+foreignKeyColumnMap.getName());
+				Column pk1 = foreignKeyColumnMap.getPrimaryKeyColumn();
+				Column fk1 = foreignKeyColumnMap.getForeignKeyColumn();
+				log.debug("------ FK = "+ fk1.getParent().getName()+"."+fk1.getName());
+				log.debug("------ REF TO PK = "+pk1.getParent().getName()+"."+pk1.getName());
+			}
+		}
+		
+		log.debug("ImportedForeignKeys of "+table.getName());
+		ForeignKey[] importedForeignKeys = table.getImportedForeignKeys();
+		for (ForeignKey foreignKey : importedForeignKeys) {
+			log.debug("--name = "+foreignKey.getName());
+			ForeignKeyColumnMap[] paris = foreignKey.getColumnPairs();
+			for (ForeignKeyColumnMap foreignKeyColumnMap : paris) {
+				log.debug("----foreignKeyColumnMap = "+foreignKeyColumnMap.getName());
+				Column pk1 = foreignKeyColumnMap.getPrimaryKeyColumn();
+				Column fk1 = foreignKeyColumnMap.getForeignKeyColumn();
+				log.debug("------ FK = "+ fk1.getParent().getName()+"."+fk1.getName());
+				log.debug("------ REF TO PK = "+pk1.getParent().getName()+"."+pk1.getName());
+			}
+		}
+		
+		log.debug("-------------------------");
 		return desc;
 	}
 

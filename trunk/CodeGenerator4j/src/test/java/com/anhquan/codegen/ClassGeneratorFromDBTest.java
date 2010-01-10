@@ -16,6 +16,8 @@
 package com.anhquan.codegen;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
@@ -26,13 +28,13 @@ import de.anhquan.codegen.DBClassGenerator;
 import de.anhquan.codegen.formatter.DaoClassDescriptiononFormatter;
 
 public class ClassGeneratorFromDBTest {
-
+	
 	@Test
 	public void testGenFromXml() throws IOException{
 		ApplicationContext context = new ClassPathXmlApplicationContext("application-context.xml");
 		LocalSessionFactoryBean sfb = (LocalSessionFactoryBean) context.getBean("&mySessionFactory");
         
-		DaoClassDescriptiononFormatter formatter = new DaoClassDescriptiononFormatter("src/main/templates/Dao.class.tpl","com.sachvietonline.core.entity");
+		DaoClassDescriptiononFormatter formatter = new DaoClassDescriptiononFormatter("src/main/templates/Dao.class.tpl","com.sachvietonline.core.dao");
 		DBClassGenerator gen = (DBClassGenerator) context.getBean("dbClassGenerator");
 		gen.setLocalSessionFactoryBean(sfb);
 		
@@ -41,6 +43,10 @@ public class ClassGeneratorFromDBTest {
 		gen.setAuthor("Anh Quan");
 		gen.setLicense("Apache 2.0");
 		gen.setTargetDirectory("src/main/java");
+		gen.setConfigOutputDir("src/main/resources");
+		gen.setConfigOutputFileName("persistent");
+		gen.setConfigTemplate("src/main/templates/persistent.xml.tpl");
+		gen.setExcludedList("book_tag");
 		gen.generate();
 	}
 }
