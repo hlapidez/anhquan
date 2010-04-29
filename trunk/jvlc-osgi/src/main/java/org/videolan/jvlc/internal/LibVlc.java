@@ -39,7 +39,7 @@ import com.sun.jna.Union;
 public interface LibVlc extends Library
 {
 
-	LibVlc INSTANCE = (LibVlc) Native.loadLibrary(Platform.isWindows()? ".\\vlc_exec\\libvlc" : "vlc", LibVlc.class);
+	LibVlc INSTANCE = (LibVlc) Native.loadLibrary(Platform.isWindows()? "c:\\vlc-1.0.3\\libvlc" : "vlc", LibVlc.class);
 
     LibVlc SYNC_INSTANCE = (LibVlc) Native.synchronizedLibrary(INSTANCE);
     
