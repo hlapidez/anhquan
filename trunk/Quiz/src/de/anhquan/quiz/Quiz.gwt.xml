@@ -1,0 +1,36 @@
+<module rename-to="Quiz">
+	<!-- Inherit the core Web Toolkit stuff. -->
+	<inherits name="com.google.gwt.core.Core" />
+	<inherits name='com.google.gwt.user.User' />
+	<inherits name="com.google.gwt.i18n.I18N" />
+	<inherits name="com.google.gwt.i18n.CldrLocales" />
+
+	<inherits name="com.google.gwt.user.theme.standard.StandardResources" />
+	<inherits name="com.google.gwt.user.theme.chrome.ChromeResources" />
+	<!-- <inherits name="com.google.gwt.user.theme.dark.DarkResources" /> -->
+
+	<!-- Enable debug ID. -->
+	<inherits name="com.google.gwt.user.Debug" />
+	<set-property name="gwt.enableDebugId" value="true" />
+
+	<!-- Specify the app entry point class. -->
+	<entry-point class='de.anhquan.quiz.client.MainEntryPoint' />
+
+	<!-- Internationalization support. -->
+	<extend-property name="locale" values="en_US" />
+	<!-- This property to speed up the GWT compiler -->
+
+	<!-- <extend-property name="locale" values="de_DE" /> <extend-property name="locale" 
+		values="ar"/> <extend-property name="locale" values="fr"/> <extend-property 
+		name="locale" values="zh"/> -->
+	<set-property-fallback name="locale" value="en_US" />
+
+	<!-- This property to speed up the GWT compiler -->
+	<!-- gecko,gecko1_8, ie6, opera, safari -->
+	<!-- Only use Chrome in development -->
+	<set-property name="user.agent" value="gecko1_8" />
+
+	<source path='client' />
+	<source path='shared' />
+
+</module>
