@@ -60,6 +60,8 @@ public class QuizPage extends AbstractPage {
 	public void gotoNextQuiz() {
 		prepareToChangeQuiz();
 		quizContent.setVisible(false);
+		
+		
 		quizSrv.nextQuiz(currentQuizId, new AsyncCallback<QuizResult>() {
 
 			@Override
