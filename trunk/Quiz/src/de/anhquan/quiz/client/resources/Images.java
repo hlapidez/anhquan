@@ -39,5 +39,8 @@ public interface Images extends ClientBundleWithLookup {
 	ImageResource de_DE();
 	
 	ImageResource en_US();
+	
+	@Source("loading.gif")
+	ImageResource loadingIcon();
 
 }

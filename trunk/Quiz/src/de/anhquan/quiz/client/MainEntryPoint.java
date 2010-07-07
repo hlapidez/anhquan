@@ -37,7 +37,7 @@ import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import de.anhquan.quiz.client.modules.HelloWorldPage;
+import de.anhquan.quiz.client.modules.QuizPage;
 import de.anhquan.quiz.client.resources.Images;
 import de.anhquan.quiz.client.resources.i18n.AppConstants;
 import de.anhquan.quiz.client.widgets.CountryFlagButton;
@@ -144,9 +144,8 @@ public class MainEntryPoint implements EntryPoint {
 	private void setupSidebarMenu() {
 		Tree sidebarMenu = app.getSidebarMenu();
 		
-		HelloWorldPage helloPage = new HelloWorldPage();
 		TreeItem menuDemo = createMenuRootItem(sidebarMenu, AppConstants.INST.menuDemo());
-		addMenuItem(menuDemo, helloPage);
+		addMenuItem(menuDemo, new QuizPage());
 		
 	}
 	

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<project name="Quiz" default="build" basedir=".">
+<project name="Quiz" default="devmode" basedir=".">
   <!-- Arguments to gwtc and devmode targets -->
   <property name="gwt.args" value="" />
     <!-- Configure path to GWT SDK -->
@@ -86,5 +86,11 @@
     <delete dir="war/WEB-INF/classes" failonerror="false" />
     <delete dir="war/Quiz" failonerror="false" />
   </target>
+	
+	 <target name="eclipse.clean" description="clean eclipse project settings">
+	    <delete file="Quiz.launch" failonerror="false" />
+	    <delete file=".classpath" failonerror="false" />
+	 	<delete file=".project" failonerror="false" />
+	  </target>
 
 </project>

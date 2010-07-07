@@ -6,6 +6,15 @@
 	</welcome-file-list>
 
 	<servlet>
+		<servlet-name>quizService</servlet-name>
+		<servlet-class>de.anhquan.quiz.server.QuizServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>quizService</servlet-name>
+		<url-pattern>/Quiz/quiz</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
 		<servlet-name>remoteLoggingService</servlet-name>
 		<servlet-class>com.google.gwt.gen2.logging.server.RemoteLoggingService
 		</servlet-class>
