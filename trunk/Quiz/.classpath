@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="C:/code/eclipse-rcp-helios-win32/eclipse/plugins/com.google.gwt.eclipse.sdkbundle.2.0.3_2.0.3.v201006230916/gwt-2.0.3/gwt-user.jar"/>
+	<classpathentry kind="lib" path="C:/code/eclipse-rcp-helios-win32/eclipse/plugins/com.google.gwt.eclipse.sdkbundle.2.0.3_2.0.3.v201006230916/gwt-2.0.3/gwt-dev.jar"/>
+	<classpathentry kind="lib" path="lib/org.restlet-2.0rc3.jar"/>
+	<classpathentry kind="lib" path="lib/org.restlet.ext.json-2.0rc3.jar"/>
+	<classpathentry kind="lib" path="lib/org.restlet.ext.xml-2.0rc3.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/org.json.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/org.restlet-2.0rc3.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/org.restlet.ext.crypto-2.0rc3.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/org.restlet.ext.gwt-2.0rc3.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/org.restlet.ext.json-2.0rc3.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/org.restlet.ext.servlet-2.0rc3.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/org.restlet.ext.xml-2.0rc3.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/org.restlet.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
+	<classpathentry kind="output" path="war/WEB-INF/classes"/>
+</classpath>
