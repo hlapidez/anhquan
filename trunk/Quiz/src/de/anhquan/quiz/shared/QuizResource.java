@@ -22,7 +22,7 @@ public interface QuizResource {
 //    @Delete
 //    public void removeQuizItemById(Integer id);
 
-    @Put("json")
-	public void next();
+    @Post("json")
+	public QuizItem gotoItem(Integer id);
     
 }

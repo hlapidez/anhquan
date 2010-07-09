@@ -20,7 +20,7 @@ public class QuizItem implements Serializable {
     
     private String subCategory;
 
-//    private List<Choice<?>> choices;
+    private List<Choice> choices;
     
     private int point;
 
@@ -103,24 +103,24 @@ public class QuizItem implements Serializable {
 	}
 
 
-//	public List<Choice<?>> getChoices() {
-//		return choices;
-//	}
-//
-//	public void setChoices(List<Choice<?>> choices) {
-//		this.choices = choices;
-//	}
-//	
-//	public void addChoice(Choice<?> choice){
-//		if (choices==null)
-//			choices = new ArrayList<Choice<?>>();
-//		this.choices.add(choice);
-//	}
-//	
-//	public void removeChoice(Choice<?> choice){
-//		if (choices==null)
-//			return;
-//		this.choices.remove(choice);
-//	}
+	public List<Choice> getChoices() {
+		return choices;
+	}
+
+	public void setChoices(List<Choice> choices) {
+		this.choices = choices;
+	}
+	
+	public void addChoice(Choice choice){
+		if (choices==null)
+			choices = new ArrayList<Choice>();
+		this.choices.add(choice);
+	}
+	
+	public void removeChoice(Choice choice){
+		if (choices==null)
+			return;
+		this.choices.remove(choice);
+	}
 	
 }
