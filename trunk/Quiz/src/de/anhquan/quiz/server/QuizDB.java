@@ -5,6 +5,7 @@ import java.util.List;
 
 import de.anhquan.quiz.shared.BooleanSolution;
 import de.anhquan.quiz.shared.Choice;
+import de.anhquan.quiz.shared.QuizInfo;
 import de.anhquan.quiz.shared.QuizItem;
 import de.anhquan.quiz.shared.Solution;
 import de.anhquan.quiz.shared.TextSolution;
@@ -45,18 +46,9 @@ public class QuizDB {
 		
 		q = new QuizItem();
 		q.setText(new TranslatedString("Are girls dumber than boys? Or is it the other way around?", "Sind Mädchen dümmer als Jungen? Oder ist es umgekehrt?"));
-		Solution s = new BooleanSolution(false);
-		TranslatedString txt = new TranslatedString();
-		txt.setOrigin("Hey, just because I am a girl, it doesn't make me dumb");
-		txt.setTranslation("dd");
-		Choice c = new Choice();
-		c.setSolution(s);
-		c.setText(txt);
-		
-		q.addChoice(c);
-		
+		q.setAnswerHeader(new TranslatedString("The result is","Das Ergebnis ist"));
 		q.addChoice(new Choice(new BooleanSolution(false), new TranslatedString("Hey, just because I am a girl, it doesn't make me dumb","Hey, nur weil ich ein Mädchen bin, macht es nicht mich stumm")));
-		q.addChoice(new Choice(new BooleanSolution(false), new TranslatedString("Men like me have bigger brains. It's science!","Männer wie ich haben größere Gehirne. Es ist Wissenschaft!")));
+		q.addChoice(new Choice(new BooleanSolution(true), new TranslatedString("Men like me have bigger brains. It's science!","Männer wie ich haben größere Gehirne. Es ist Wissenschaft!")));
 		q.addChoice(new Choice(new BooleanSolution(false), new TranslatedString("I am a girl, and clearly smarter than my guy friends","I am a girl, and clearly smarter than my guy friends")));
 		q.setImage("http://aslcdn.celebuzz.com/images/2007/03/tyra030207-thumb.jpg");
 		q.setPoint(2);
@@ -66,7 +58,8 @@ public class QuizDB {
 		
 		q = new QuizItem();
 		q.setText(new TranslatedString("Are you human?", "Sind Sie man?"));
-		q.addChoice(new Choice(new TextSolution("2"), new TranslatedString("1 + 1 = ___ ?")));
+		q.setAnswerHeader(new TranslatedString("The result is","Das Ergebnis ist"));
+		q.addChoice(new Choice(new TextSolution("2"), new TranslatedString("1 + 1 = " + QuizItem.TEXT_INPUT_SEPARATOR+" ?","")));
 		q.setImage(null);
 		q.setPoint(1);		
 		q.setSubCategory("Kids");
@@ -75,14 +68,16 @@ public class QuizDB {
 	}
 
 	private static void addQuiz(QuizItem q) {
-		q.setId(quizzes.size());
+		q.setId(quizzes.size());		
 		quizzes.add(q);
 	}
 	
 	public static QuizItem getQuizById(int quizId){
 		for (QuizItem quiz : QuizDB.quizzes) {
-			if (quiz.getId() == quizId)
+			if (quiz.getId() == quizId){
+				quiz.getInfo().setQuizCount(QuizDB.quizzes.size());
 				return quiz;
+			}
 		}
 		return null;
 	}
