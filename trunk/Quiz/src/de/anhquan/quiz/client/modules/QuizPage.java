@@ -1,12 +1,14 @@
 package de.anhquan.quiz.client.modules;
 
-import java.util.List;
+import java.io.StringWriter;
+
+import org.restlet.client.data.MediaType;
+import org.restlet.client.data.Preference;
+import org.restlet.client.resource.Result;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -22,10 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import de.anhquan.quiz.client.AbstractPage;
 import de.anhquan.quiz.client.resources.Images;
-import de.anhquan.quiz.shared.Choice;
-import de.anhquan.quiz.shared.Question;
-import de.anhquan.quiz.shared.QuizResult;
-import de.anhquan.quiz.shared.Solution;
+import de.anhquan.quiz.shared.QuizItem;
 
 public class QuizPage extends AbstractPage {
 
@@ -41,15 +40,12 @@ public class QuizPage extends AbstractPage {
 		panel.setWidget(3, 0, createFooter());
 
 		currentQuizId = -1;
-		quizSrv = GWT.create(QuizService.class);
-		((ServiceDefTarget) quizSrv).setServiceEntryPoint(GWT.getModuleBaseURL() + "quiz");
 
 		gotoNextQuiz();
 		return panel;
 	}
 
 	int currentQuizId;
-	QuizServiceAsync quizSrv = null;
 
 	private void prepareToChangeQuiz() {
 		setLoading(true, "Loading ...");
@@ -61,40 +57,105 @@ public class QuizPage extends AbstractPage {
 		prepareToChangeQuiz();
 		quizContent.setVisible(false);
 		
-		
-		quizSrv.nextQuiz(currentQuizId, new AsyncCallback<QuizResult>() {
-
+		final QuizResourceProxy quizResource = GWT
+        .create(QuizResourceProxy.class);
+        quizResource.getClientResource().setReference(
+	   	 "/quiz");
+	   	 quizResource.getClientResource().getClientInfo()
+	        .getAcceptedMediaTypes().add(
+	                new Preference<MediaType>(
+	                        MediaType.APPLICATION_JAVA_OBJECT_GWT));
+	   	 
+	   	quizResource.next(new Result<Void>() {
+			
 			@Override
-			public void onSuccess(QuizResult result) {
-				QuizPage.this.updateQuiz(result);
-				setLoading(false, "");
+			public void onSuccess(Void result) {
+				setNotification("Finding completed! : ");
 			}
-
+			
 			@Override
 			public void onFailure(Throwable caught) {
-				setNotification(caught.getMessage());
-				setLoading(false, "");
+				caught.printStackTrace();
+				setNotification("CONTACT: "+caught.getMessage());
 			}
 		});
+//		quizResource.getContact(new Result<Contact>() {
+//			
+//			@Override
+//			public void onSuccess(Contact result) {
+//				// TODO Auto-generated method stub
+//				setNotification("OK");
+//			}
+//			
+//			@Override
+//			public void onFailure(Throwable caught) {
+//				// TODO Auto-generated method stub
+//				setNotification("NG");
+//			}
+//		});
+//		quizResource.next(new Result<QuizResult>() {
+//			
+//			@Override
+//			public void onSuccess(QuizResult result) {
+//				// TODO Auto-generated method stub
+//				setLoading(false, "");
+//				setNotification("OK");
+//			}
+//			
+//			@Override
+//			public void onFailure(Throwable caught) {
+//				setNotification(caught.getMessage());
+//				setLoading(false, "");
+//			}
+//		});
+//		quizResource.nextQuiz(currentQuizId, new Result<QuizResult>() {
+//			
+//			@Override
+//			public void onSuccess(QuizResult result) {
+//				QuizPage.this.updateQuiz(result);
+//				setLoading(false, "");
+//			}
+//			
+//			@Override
+//			public void onFailure(Throwable caught) {
+//				setNotification(caught.getMessage());
+//				setLoading(false, "");
+//			}
+//		});
+		
+//		quizSrv.nextQuiz(currentQuizId, new AsyncCallback<QuizResult>() {
+//
+//			@Override
+//			public void onSuccess(QuizResult result) {
+//				QuizPage.this.updateQuiz(result);
+//				setLoading(false, "");
+//			}
+//
+//			@Override
+//			public void onFailure(Throwable caught) {
+//				setNotification(caught.getMessage());
+//				setLoading(false, "");
+//			}
+//		});
 	}
 
 	public void gotoPrevQuiz() {
 		prepareToChangeQuiz();
 		quizContent.setVisible(false);
-		quizSrv.prevQuiz(currentQuizId, new AsyncCallback<QuizResult>() {
-
-			@Override
-			public void onSuccess(QuizResult result) {
-				QuizPage.this.updateQuiz(result);
-				setLoading(false, "");
-			}
-
-			@Override
-			public void onFailure(Throwable caught) {
-				setNotification(caught.getMessage());
-				setLoading(false, "");
-			}
-		});
+//		quizSrv.prevQuiz(currentQuizId, new AsyncCallback<QuizResult>() {
+//
+//			@Override
+//			public void onSuccess(QuizResult result) {
+//				QuizPage.this.updateQuiz(result);
+//				setLoading(false, "");
+//			}
+//
+//			@Override
+//			public void onFailure(Throwable caught) {
+//				setNotification(caught.getMessage());
+//				setLoading(false, "");
+//			}
+//		});
 	}
 
 	CheckBox answerA;
@@ -111,61 +172,59 @@ public class QuizPage extends AbstractPage {
 	Panel loadingPanel;
 	Image loadingIcon;
 
-	Question quiz = null;
-
-	public void updateQuiz(QuizResult result) {
-		quiz = result.getQuiz();
-
-		if (quiz == null) {
-			setNotification("QUESTION IS EMPTY");
-			return;
-		}
-
-		// status
-		currentQuizId = quiz.getId();
-		btPrev.setEnabled(currentQuizId > 0);
-		btNext.setEnabled(currentQuizId < (result.getQuizCount() - 1));
-
-		// common
-		setNotification("");
-		question.setHTML(quiz.getText().getOrigin());
-
-		// image
-		updateImage(quiz.getImage());
-
-		quizContent.setVisible(true);
-		
-		answerPanel.clear();
-		String txt  = quiz.getAnswerHeader().getOrigin(); 
-		if (!isEmpty(txt)){
-			answerHeader = new HTML(txt);
-			answerPanel.add(answerHeader);
-		}
-		
-		List<Choice<?>> choices = quiz.getChoices();
-		for (Choice<?> choice : choices) {
-			Solution s = choice.isSolution();
-			Object value = s.getValue();
-			if (value instanceof String){
-				HorizontalPanel txtPanel = new HorizontalPanel();
-				String str = choice.getText().getOrigin();
-				String[] ss = str.split(Question.TEXT_INPUT_SEPARATOR);
-				
-				txtPanel.add(new HTML(ss[0]));
-		
-				answerText = new TextBox();
-				txtPanel.add(answerText);
-		
-				txtPanel.add(new HTML(ss[1]));
-				
-				answerPanel.add(txtPanel);
-			}
+	public void updateQuiz(QuizItem result) {
+//		quiz = result.getQuiz();
+//
+//		if (quiz == null) {
+//			setNotification("QUESTION IS EMPTY");
+//			return;
+//		}
+//
+//		// status
+//		currentQuizId = quiz.getId();
+//		btPrev.setEnabled(currentQuizId > 0);
+//		btNext.setEnabled(currentQuizId < (result.getQuizCount() - 1));
+//
+//		// common
+//		setNotification("");
+//		question.setHTML(quiz.getText().getOrigin());
+//
+//		// image
+//		updateImage(quiz.getImage());
+//
+//		quizContent.setVisible(true);
+//		
+//		answerPanel.clear();
+//		String txt  = quiz.getAnswerHeader().getOrigin(); 
+//		if (!isEmpty(txt)){
+//			answerHeader = new HTML(txt);
+//			answerPanel.add(answerHeader);
+//		}
+//		
+//		List<Choice<?>> choices = quiz.getChoices();
+//		for (Choice<?> choice : choices) {
+//			Solution s = choice.isSolution();
+//			Object value = s.getValue();
+//			if (value instanceof String){
+//				HorizontalPanel txtPanel = new HorizontalPanel();
+//				String str = choice.getText().getOrigin();
+//				String[] ss = str.split(Question.TEXT_INPUT_SEPARATOR);
+//				
+//				txtPanel.add(new HTML(ss[0]));
+//		
+//				answerText = new TextBox();
+//				txtPanel.add(answerText);
+//		
+//				txtPanel.add(new HTML(ss[1]));
+//				
+//				answerPanel.add(txtPanel);
+//			}
 //			else if (value instanceof SerializedBoolean){
 //				CheckBox cb = new CheckBox();
 //				cb.setText(choice.getText().getOrigin());
 //				answerPanel.add(cb);
 //			}
-		}
+//		}
 		
 	}
 
@@ -237,10 +296,10 @@ public class QuizPage extends AbstractPage {
 
 	protected void validateAnswer() {
 
-		if (quiz == null) {
-			setNotification("Please select a question first!");
-			return;
-		}
+//		if (quiz == null) {
+//			setNotification("Please select a question first!");
+//			return;
+//		}
 
 	}
 
