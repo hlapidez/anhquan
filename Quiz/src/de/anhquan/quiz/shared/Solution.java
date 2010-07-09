@@ -1,8 +1,9 @@
 package de.anhquan.quiz.shared;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
+import java.io.Serializable;
 
-public class Solution<T> implements IsSerializable{
+
+public class Solution<T> implements Serializable{
 
 	private T value;
 	

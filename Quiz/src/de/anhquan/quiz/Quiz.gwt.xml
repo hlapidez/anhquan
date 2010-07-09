@@ -13,6 +13,11 @@
 	<inherits name="com.google.gwt.user.Debug" />
 	<set-property name="gwt.enableDebugId" value="true" />
 
+	<!-- Other module inherits                                      -->
+	<inherits name='org.restlet.Restlet' />
+	<inherits name='org.restlet.JSON' />
+	<inherits name='org.restlet.XML' />
+	
 	<!-- Specify the app entry point class. -->
 	<entry-point class='de.anhquan.quiz.client.MainEntryPoint' />
 

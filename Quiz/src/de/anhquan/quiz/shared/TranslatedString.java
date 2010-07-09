@@ -1,9 +1,14 @@
 package de.anhquan.quiz.shared;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
+import java.io.Serializable;
 
-public class TranslatedString implements IsSerializable{
 
+public class TranslatedString implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String origin;
 	private String translation;
 	

@@ -1,9 +1,11 @@
 package de.anhquan.quiz.shared;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
+import java.io.Serializable;
 
-public class Choice<T> implements IsSerializable {
 
+public class Choice<T> implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	TranslatedString text;
 	Solution<T> solution;
 
