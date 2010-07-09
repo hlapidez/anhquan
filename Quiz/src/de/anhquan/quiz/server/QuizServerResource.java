@@ -26,7 +26,7 @@ public class QuizServerResource extends ServerResource implements
 	}
 
 	@Override
-	public void next() {
+	public QuizItem gotoItem(Integer step) {
 		
 		System.out.println("GogoItem: "+1);
 		if (curQuizId==null)
@@ -34,7 +34,7 @@ public class QuizServerResource extends ServerResource implements
 		
 		curQuizId+= 1;
 		
-		//return QuizDB.quizzes.get(curQuizId);
+		return QuizDB.quizzes.get(curQuizId);
 	}
 
 
