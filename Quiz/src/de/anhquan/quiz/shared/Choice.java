@@ -3,18 +3,18 @@ package de.anhquan.quiz.shared;
 import java.io.Serializable;
 
 
-public class Choice<T> implements Serializable {
+public class Choice implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	TranslatedString text;
-	Solution<T> solution;
+	Solution solution;
 
 	public Choice() {
 		setSolution(null);
 		setText(TranslatedString.EMPTY);
 	}
 
-	public Choice(Solution<T> solution, TranslatedString text) {
+	public Choice(Solution solution, TranslatedString text) {
 		setSolution(solution);
 		setText(text);
 	}
@@ -27,11 +27,11 @@ public class Choice<T> implements Serializable {
 		this.text = text;
 	}
 
-	public Solution<T> isSolution() {
+	public Solution isSolution() {
 		return solution;
 	}
 
-	public void setSolution(Solution<T> solution) {
+	public void setSolution(Solution solution) {
 		this.solution = solution;
 	}
 
