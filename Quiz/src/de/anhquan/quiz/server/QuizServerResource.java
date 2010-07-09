@@ -18,19 +18,15 @@ public class QuizServerResource extends ServerResource implements
 	
 	@Override
 	public QuizItem getQuizItemById(Integer id) {
-		return QuizDB.quizzes.get(0);
+		QuizItem item = QuizDB.getQuizById(id);
+		
+		return item;
 	}
 
 	@Override
-	public QuizItem gotoItem(Integer step) {
+	public QuizItem gotoItem(Integer id) {
 		
-		System.out.println("GogoItem: "+1);
-		if (curQuizId==null)
-			curQuizId = -1;
-		
-		curQuizId+= 1;
-		
-		return QuizDB.quizzes.get(curQuizId);
+		return QuizDB.getQuizById(id);
 	}
 
 

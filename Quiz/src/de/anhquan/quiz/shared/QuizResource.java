@@ -16,7 +16,7 @@ public interface QuizResource {
 //    @Put
 //    public void store(QuizItem item);
 //    
-    @Get("json")
+    @Post("json")
     public QuizItem getQuizItemById(Integer id);
 
 //    @Delete

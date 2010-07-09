@@ -8,9 +8,11 @@ public class QuizItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private TranslatedString text;
+	public static final String TEXT_INPUT_SEPARATOR = "___";
+
+    private TranslatedString text = TranslatedString.EMPTY;
     
-    private TranslatedString answerHeader;
+    private TranslatedString answerHeader = TranslatedString.EMPTY;
 
     private String name;
     
@@ -25,8 +27,11 @@ public class QuizItem implements Serializable {
     private int point;
 
     private int id;
+    
+    private QuizInfo info;
 
     public QuizItem() {
+    	this(TranslatedString.EMPTY,"",0);
     }
 
     public QuizItem(TranslatedString answerHeader, String name,
@@ -35,6 +40,9 @@ public class QuizItem implements Serializable {
         this.answerHeader = answerHeader;
         this.name = name;
         this.point = point;
+        choices = new ArrayList<Choice>();
+        info = new QuizInfo();
+        
     }
 
     public int getPoint() {
@@ -102,7 +110,6 @@ public class QuizItem implements Serializable {
 		this.id = id;
 	}
 
-
 	public List<Choice> getChoices() {
 		return choices;
 	}
@@ -112,15 +119,19 @@ public class QuizItem implements Serializable {
 	}
 	
 	public void addChoice(Choice choice){
-		if (choices==null)
-			choices = new ArrayList<Choice>();
 		this.choices.add(choice);
 	}
 	
 	public void removeChoice(Choice choice){
-		if (choices==null)
-			return;
 		this.choices.remove(choice);
+	}
+
+	public QuizInfo getInfo() {
+		return info;
+	}
+
+	public void setInfo(QuizInfo info) {
+		this.info = info;
 	}
 	
 }

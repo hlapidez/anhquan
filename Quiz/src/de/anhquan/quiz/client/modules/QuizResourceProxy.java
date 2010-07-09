@@ -9,7 +9,7 @@ import org.restlet.client.resource.Result;
 import de.anhquan.quiz.shared.QuizItem;
 
 public interface QuizResourceProxy extends ClientProxy{
-    @Get("json")
+    @Post("json")
     public void getQuizItemById(Integer id, Result<QuizItem> callback);
 
     @Post("json")
