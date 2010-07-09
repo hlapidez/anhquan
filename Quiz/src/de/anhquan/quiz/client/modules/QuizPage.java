@@ -66,17 +66,19 @@ public class QuizPage extends AbstractPage {
 	                new Preference<MediaType>(
 	                        MediaType.APPLICATION_JAVA_OBJECT_GWT));
 	   	 
-	   	quizResource.next(new Result<Void>() {
+	   	quizResource.gotoItem(2, new Result<QuizItem>() {
 			
 			@Override
-			public void onSuccess(Void result) {
-				setNotification("Finding completed! : ");
+			public void onSuccess(QuizItem result) {
+				setNotification("Finding completed! : " + result.getAnswerHeader().getOrigin());
+				setLoading(false, "");
 			}
 			
 			@Override
 			public void onFailure(Throwable caught) {
 				caught.printStackTrace();
-				setNotification("CONTACT: "+caught.getMessage());
+				setNotification("Throwable: "+caught.getMessage());
+				setLoading(false, "");
 			}
 		});
 //		quizResource.getContact(new Result<Contact>() {
