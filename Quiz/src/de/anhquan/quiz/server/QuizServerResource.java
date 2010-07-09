@@ -1,13 +1,9 @@
 package de.anhquan.quiz.server;
 
-import java.util.Map;
-
-import org.restlet.Request;
 import org.restlet.resource.ServerResource;
 
-import de.anhquan.quiz.shared.QuizResource;
 import de.anhquan.quiz.shared.QuizItem;
-import de.anhquan.quiz.shared.TranslatedString;
+import de.anhquan.quiz.shared.QuizResource;
 
 /**
  * The server side implementation of the Restlet resource.
