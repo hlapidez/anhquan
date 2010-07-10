@@ -257,6 +257,9 @@ public class MainEntryPoint implements EntryPoint {
 		String appCss = CUR_THEME + "/app.css";
 		String incubatorCss = CUR_THEME + "/incubator.css";
 		String gwtUpload = CUR_THEME + "/gwtupload.css";
+		
+		String advancedGWT = "advanced/themes/"+CUR_THEME + "/theme.css";
+		
 		if (LocaleInfo.getCurrentLocale().isRTL()) {
 			gwtStyleSheet = gwtStyleSheet.replace(".css", "_rtl.css");
 			appCss = appCss.replace(".css", "_rtl.css");
@@ -338,6 +341,8 @@ public class MainEntryPoint implements EntryPoint {
 		StyleSheetLoader.loadStyleSheet(modulePath + incubatorCss, getCurrentReferenceStyleName("Incubator"), callback);
 		
 		StyleSheetLoader.loadStyleSheet(modulePath + gwtUpload, getCurrentReferenceStyleName("gwtUpload"), callback);
+		
+		StyleSheetLoader.loadStyleSheet(modulePath + advancedGWT, getCurrentReferenceStyleName("advanced"), callback);
 		
 		
 	}

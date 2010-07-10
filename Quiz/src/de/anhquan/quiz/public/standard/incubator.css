@@ -100,3 +100,20 @@ body {
   font-weight: bold;
   text-align: right;
 }
+
+.gwt-GlassPanel {
+
+    background-color: black !important;
+
+    /* Override glass panel to 10% opacity (= 90% transparency) */
+    filter: alpha(opacity = 90) !important; /* IE */
+    opacity: 0.4 !important; /* non-IE */
+
+    /*
+      NOTE: Please do NOT use either CSS 'width' or 'height' here, as
+      this would defeat much of the effort that went into GlassPanel
+      in order to get it to work consistently in a variety of
+      circumstances. Specifically, please resist the urge to use
+      'width/height: 100%' or similar constructs.
+    */
+  }

@@ -10,6 +10,8 @@
 	<!-- <inherits name="com.google.gwt.user.theme.dark.DarkResources" /> -->
 
 	<!-- Enable debug ID. -->
+	<inherits name="com.google.gwt.widgetideas.GlassPanel"/>
+	<inherits name='org.gwt.advanced.Grid'/>
 	<inherits name="com.google.gwt.user.Debug" />
 	<set-property name="gwt.enableDebugId" value="true" />
 
