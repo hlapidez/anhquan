@@ -9,10 +9,6 @@ import org.restlet.client.resource.Result;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseUpEvent;
-import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -21,15 +17,15 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import de.anhquan.quiz.client.AbstractPage;
 import de.anhquan.quiz.client.resources.Images;
+import de.anhquan.quiz.client.widgets.TranslatedCheckBox;
+import de.anhquan.quiz.client.widgets.TranslatedLabel;
+import de.anhquan.quiz.client.widgets.TranslatedTextBox;
 import de.anhquan.quiz.shared.BooleanSolution;
 import de.anhquan.quiz.shared.Choice;
 import de.anhquan.quiz.shared.QuizItem;
@@ -46,9 +42,12 @@ public class QuizPage extends AbstractPage {
 	public Widget onInitialize() {
 		FlexTable panel = new FlexTable();
 		panel.setWidget(1, 0, createHeader());
-		panel.setWidget(2, 0, createBody());
-		panel.setWidget(3, 0, createFooter());
+		panel.setWidget(2, 0, createQuizInfoPanel());
+		panel.setWidget(3, 0, createNotificationPanel());
+		panel.setWidget(4, 0, createBody());
+		
 
+		quizValidator = new QuizValidator ();
 		currentQuizId = -1;
 		
 		quizResource = GWT
@@ -80,7 +79,7 @@ public class QuizPage extends AbstractPage {
 			
 			@Override
 			public void onSuccess(QuizItem result) {
-				QuizPage.this.updateQuiz(result);
+				QuizPage.this.showQuiz(result);
 				setLoading(false, "");
 			}
 			
@@ -103,37 +102,44 @@ public class QuizPage extends AbstractPage {
 		updateCurrentQuiz();
 	}
 
-	TextBox answerText;
-	HTML prefixAnswerText;
-	HTML suffixAnswerText;
 	Image image = null;
-	HTML question;
-	HTML answerHeader;
+	TranslatedLabel question;
+	TranslatedLabel answerHeader;
 	Panel imageHolder;
 	Label loadingMsg;
 	Panel loadingPanel;
 	Image loadingIcon;
 	
 	QuizItem quiz = null;
+	private QuizValidator quizValidator;
 
-	public void updateQuiz(QuizItem result) {
+	Panel quizContent;
+	Panel answerPanel;
+
+	Button btPrev;
+	Button btNext;
+	Button btAnswer;
+
+	public void showQuiz(QuizItem result) {
 		quiz = result;
-
 		if (quiz == null) {
-			setNotification("QUESTION IS EMPTY");
 			return;
 		}
+		
+		quizValidator.reset();
+		
+		updateQuizInfo();
 
 		// status
 		currentQuizId = quiz.getId();
 		int quizCount = quiz.getInfo().getQuizCount();
 		btPrev.setEnabled(currentQuizId > 0);
 		btNext.setEnabled(currentQuizId < (quizCount-1));
-
+		btAnswer.setEnabled(true);
+		
 		// common
-		setNotification("Question "+(currentQuizId+1)+"/"+quizCount);
-		question.setHTML(quiz.getText().getOrigin());
-		transQuestion.setHTML(quiz.getText().getTranslation());
+		setNotification("");
+		question.setContent(quiz.getText());
 
 		// image
 		updateImage(quiz.getImage());
@@ -143,7 +149,8 @@ public class QuizPage extends AbstractPage {
 		answerPanel.clear();
 		String txt  = quiz.getAnswerHeader().getOrigin(); 
 		if (!isEmpty(txt)){
-			answerHeader = new HTML(txt);
+			answerHeader = new TranslatedLabel();
+			answerHeader.setContent(quiz.getAnswerHeader());
 			answerPanel.add(answerHeader);
 		}
 		
@@ -151,23 +158,19 @@ public class QuizPage extends AbstractPage {
 		for (Choice choice : choices) {
 			Solution s = choice.isSolution();
 			if (s instanceof TextSolution){
-				HorizontalPanel txtPanel = new HorizontalPanel();
-				String str = choice.getText().getOrigin();
-				String[] ss = str.split(QuizItem.TEXT_INPUT_SEPARATOR);
-				
-				txtPanel.add(new HTML(ss[0]));
 		
-				answerText = new TextBox();
-				txtPanel.add(answerText);
-		
-				txtPanel.add(new HTML(ss[1]));
+				TranslatedTextBox txtBox = new TranslatedTextBox();
+				txtBox.setContent(choice.getText());
+				answerPanel.add(txtBox);
 				
-				answerPanel.add(txtPanel);
+				quizValidator.add((TextSolution)s, txtBox);
 			}
 			else if (s instanceof BooleanSolution){
-				CheckBox cb = new CheckBox();
-				cb.setText(choice.getText().getOrigin());
+				TranslatedCheckBox cb = new TranslatedCheckBox();
+				cb.setContent(choice.getText());
 				answerPanel.add(cb);
+				
+				quizValidator.add ((BooleanSolution)s, cb);
 			}
 		}
 		
@@ -178,6 +181,7 @@ public class QuizPage extends AbstractPage {
 	}
 
 	private HTML notification;
+	private HTML txtQuestionInfo;
 
 	private void setNotification(String text) {
 		notification.setHTML(text);
@@ -202,41 +206,36 @@ public class QuizPage extends AbstractPage {
 			imageHolder.add(image);
 		}
 	}
+	
+	
+	private Widget createQuizInfoPanel(){
+		Panel panel = new HorizontalPanel();
+		
+		txtQuestionInfo = new HTML();
+		panel.add(txtQuestionInfo);
+		
+		return panel;
+	}
+	
+	private void updateQuizInfo(){
+		if (quiz==null){
+			return;
+		}
+		
+		String html = "<strong>Question</strong> #"+quiz.getId() + "/" + quiz.getInfo().getQuizCount()+ " [ "+quiz.getName() + " ] Category:" + quiz.getCategory() + " - " + quiz.getSubCategory();
+		txtQuestionInfo.setHTML(html);
+	}
 
-	private Widget createFooter() {
-		Panel footer = new VerticalPanel();
 
+	private Widget createNotificationPanel() {
 		// notification
-		Panel notificationPanel = new HorizontalPanel();
+		Panel panel = new HorizontalPanel();
+		
 		notification = new HTML();
-		notificationPanel.add(notification);
-		footer.add(notificationPanel);
-
-		// toolbar
-		Panel toolbar = new HorizontalPanel();
-		Button btAnswer = new Button("Answer");
-		btAnswer.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				validateAnswer();
-			}
-		});
-
-		toolbar.add(btAnswer);
-
-		Button btSolution = new Button("Solution");
-		toolbar.add(btSolution);
-
-		CheckBox cbMark = new CheckBox("Remember it!");
-		toolbar.add(cbMark);
-
-		footer.add(toolbar);
-
-		// solution
-		HTML solution = new HTML();
-		footer.add(solution);
-
-		return footer;
+		notification.setStyleName("Notification-Panel");
+		
+		panel.add(notification);
+		return panel;
 	}
 
 	protected void validateAnswer() {
@@ -244,47 +243,26 @@ public class QuizPage extends AbstractPage {
 		if (quiz == null) {
 			setNotification("Please select a question first!");
 		}
+		else{
+			if (quizValidator.validate()){
+				setNotification("Congratulation!");
+			}
+			else{
+				setNotification("Dont give it up. You will do it right next time!");
+			}
+		}
 
 	}
 
-//	Panel answerTextPanel;
-//	Panel choicePanel;
-	Panel quizContent;
-	Panel answerPanel;
-	HTML transQuestion;
-	PopupPanel transQuestionPanel;
 
 	private Widget createBody() {
 		quizContent = new VerticalPanel();
-		question = new HTML();
+		question = new TranslatedLabel();
 		quizContent.add(question);
-		transQuestionPanel = new PopupPanel();
-		transQuestionPanel.setGlassEnabled(false);
-		transQuestionPanel.setAutoHideEnabled(true);
-		transQuestionPanel.setModal(true);
-		transQuestion = new HTML();
-		transQuestionPanel.add(transQuestion);
 		
-		question.addMouseUpHandler(new MouseUpHandler() {
-			
-			@Override
-			public void onMouseUp(MouseUpEvent event) {
-				transQuestionPanel.showRelativeTo(question);				
-			}
-		});
-		
-		question.addMouseOutHandler(new MouseOutHandler() {
-			
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				transQuestionPanel.setVisible(false);
-			}
-		});
-		
-
 		imageHolder = new SimplePanel();
 		quizContent.add(imageHolder);
-		answerHeader = new HTML();
+		answerHeader = new TranslatedLabel();
 		quizContent.add(answerHeader);
 
 		answerPanel = new VerticalPanel();
@@ -292,9 +270,6 @@ public class QuizPage extends AbstractPage {
 
 		return quizContent;
 	}
-
-	Button btPrev;
-	Button btNext;
 
 	private Widget createHeader() {
 		Panel header = new HorizontalPanel();
@@ -314,8 +289,23 @@ public class QuizPage extends AbstractPage {
 			}
 		});
 
+		btAnswer = new Button("Answer");
+		btAnswer.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				btAnswer.setEnabled(false);
+				validateAnswer();
+			}
+		});
+		
+		CheckBox cbMark = new CheckBox("Remember it!");
+		
 		header.add(btPrev);
 		header.add(btNext);
+		header.add(btAnswer);
+		header.add(cbMark);
+
+
 
 		loadingPanel = new HorizontalPanel();
 		loadingMsg = new Label("");
