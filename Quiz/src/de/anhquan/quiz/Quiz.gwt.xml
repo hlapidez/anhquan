@@ -38,6 +38,7 @@
 	<set-property name="user.agent" value="gecko1_8" />
 	
 	<servlet path="/quizrpc" class="de.anhquan.quiz.server.QuizServiceImpl" />
+	<servlet path="/staticrpc" class="de.anhquan.quiz.server.StaticContentServiceImpl" />
 
 	<source path='client' />
 	<source path='shared' />

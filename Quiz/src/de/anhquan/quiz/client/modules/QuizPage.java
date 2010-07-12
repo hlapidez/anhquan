@@ -5,8 +5,8 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -22,11 +22,11 @@ import de.anhquan.quiz.client.AbstractPage;
 import de.anhquan.quiz.client.resources.i18n.AppMessages;
 import de.anhquan.quiz.client.widgets.LoadingPanel;
 import de.anhquan.quiz.client.widgets.NotificationPanel;
-import de.anhquan.quiz.client.widgets.NotificationPanel.MessageType;
 import de.anhquan.quiz.client.widgets.ToolTip;
 import de.anhquan.quiz.client.widgets.TranslatedCheckBox;
 import de.anhquan.quiz.client.widgets.TranslatedLabel;
 import de.anhquan.quiz.client.widgets.TranslatedTextBox;
+import de.anhquan.quiz.client.widgets.NotificationPanel.MessageType;
 import de.anhquan.quiz.shared.BooleanSolution;
 import de.anhquan.quiz.shared.Choice;
 import de.anhquan.quiz.shared.QuizItem;
@@ -36,11 +36,15 @@ import de.anhquan.quiz.shared.TextSolution;
 public class QuizPage extends AbstractPage {
 
 	public QuizPage() {
-		setName("Silly Quiz");
+		setName(AppMessages.INST.pageTraining());
 	}
 
 	@Override
 	public Widget onInitialize() {
+		GWT.log("QuizPage:onInitialize ");
+		for (String p : getParameters()) {
+			GWT.log("p = " + p);
+		}
 		FlexTable panel = new FlexTable();
 		panel.setWidget(1, 0, createToolbar());
 		panel.setWidget(2, 0, createQuizInfoPanel());
@@ -67,16 +71,12 @@ public class QuizPage extends AbstractPage {
 //
 //	   	quizResource.getClientResource().getClientInfo().getAcceptedCharacterSets().add(new Preference<CharacterSet>(CharacterSet.DEFAULT));
 
-	   	quizSrv = GWT.create(QuizService.class);
-		((ServiceDefTarget) quizSrv).setServiceEntryPoint(GWT.getModuleBaseURL() + "quizrpc");
-		
 		gotoNextQuiz();
 		return panel;
 	}
 
 	int currentQuizId;
 	QuizResourceProxy quizResource;
-	QuizServiceAsync quizSrv = null;
 	
 	private void prepareToChangeQuiz() {
 		notification.clear();
@@ -88,7 +88,7 @@ public class QuizPage extends AbstractPage {
 	private void updateCurrentQuiz(){
 		prepareToChangeQuiz();
 		quizContent.setVisible(false);
-		quizSrv.getQuizById(currentQuizId, new AsyncCallback<QuizItem>() {
+		ServicePool.RPC_QUIZ.getQuizById(currentQuizId, new AsyncCallback<QuizItem>() {
 			
 			@Override
 			public void onSuccess(QuizItem result) {
@@ -102,23 +102,7 @@ public class QuizPage extends AbstractPage {
 				loadingPanel.clear();
 			}
 		});
-		
-// Use RESTlet (but have problem with Unicode (de)encoding		
-//	   	quizResource.getQuizItemById(currentQuizId, new Result<QuizItem>() {
-//			
-//			@Override
-//			public void onSuccess(QuizItem result) {
-//				QuizPage.this.showQuiz(result);
-//				setLoading(false, "");
-//			}
-//			
-//			@Override
-//			public void onFailure(Throwable caught) {
-//				caught.printStackTrace();
-//				notification.setMessage("Throwable: "+caught.getMessage());
-//				setLoading(false, "");
-//			}
-//		});
+
 	}
 
 	public void gotoNextQuiz() {
@@ -167,11 +151,13 @@ public class QuizPage extends AbstractPage {
 
 		// status
 		currentQuizId = quiz.getId();
+		History.newItem(this.getHistoryToken()+"&quiz_id="+currentQuizId);
+		
 		int quizCount = quiz.getInfo().getQuizCount();
 		btPrev.setEnabled(currentQuizId > 0);
 		btNext.setEnabled(currentQuizId < (quizCount-1));
 		btAnswer.setEnabled(true);
-		
+		 
 		// common
 		question.setContent(quiz.getText());
 
@@ -398,4 +384,12 @@ public class QuizPage extends AbstractPage {
 		quizValidator.showSolution();
 	}
 
+	@Override
+	public void preRender() {
+		super.preRender();
+		GWT.log("QuizPage:preRender ");
+		for (String p : getParameters()) {
+			GWT.log("p = " + p);
+		}
+	}
 }

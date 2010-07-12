@@ -5,5 +5,5 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import de.anhquan.quiz.shared.QuizItem;
 
 public interface QuizServiceAsync {
-	public void getQuizById(int quizId, AsyncCallback<QuizItem> callback);
+	public void getQuizById(int quizId, AsyncCallback<QuizItem> callback) throws IllegalArgumentException;
 }

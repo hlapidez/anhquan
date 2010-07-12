@@ -10,7 +10,7 @@ public class QuizServiceImpl extends RemoteServiceServlet implements QuizService
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public QuizItem getQuizById(int id) {
+	public QuizItem getQuizById(int id) throws IllegalArgumentException{
 		System.out.println("QuizServiceImpl: getQuizById: "+id);
 		
 		if (id<1)
