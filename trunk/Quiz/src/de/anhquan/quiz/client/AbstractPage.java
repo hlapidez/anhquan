@@ -1,5 +1,7 @@
 package de.anhquan.quiz.client;
 
+import java.util.Map;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.event.logical.shared.SelectionEvent;
@@ -175,13 +177,14 @@ public abstract class AbstractPage extends LazyPanel implements SelectionHandler
 		return className;
 	}
 
-	String[] params;
-	public void setParameters(String[] params) {
-		this.params = params;
+	Map<String, String> paramMap;
+	
+	public void setParameters(Map<String, String> paramMap) {
+		this.paramMap = paramMap;
 	}
 	
-	public String[] getParameters(){
-		return this.params;
+	public Map<String, String>  getParameters(){
+		return this.paramMap;
 	}
 
 	public void preRender() {
