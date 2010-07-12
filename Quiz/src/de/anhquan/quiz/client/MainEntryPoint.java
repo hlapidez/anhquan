@@ -129,7 +129,29 @@ public class MainEntryPoint implements EntryPoint {
 
 	private void displayContentWidget(AbstractPage content, String[] params) {
 		if (content != null) {
-			content.setParameters(params);
+			
+			int len = params.length;
+			Map<String,String>paramMap = new HashMap<String, String>();
+			
+			GWT.log("displayContentWidget params ="+params.length);
+			if (len > 1){
+				
+				for(int i=1;i<len;i++){
+					String str = params[i];
+					String[] ss = str.split("=");
+					String key = ss[0];
+					String value = "";				
+					
+					if (ss.length==2)
+						value = ss[1];
+					
+
+					paramMap.put(key, value);
+					
+					GWT.log("key = "+key+ ", value = "+value);
+				}
+			}
+			content.setParameters(paramMap);
 			content.preRender();
 			app.setContentArea(content);
 			app.setContentTitle(content.getTabBar());

@@ -1,8 +1,10 @@
 package de.anhquan.quiz.client.modules;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dev.util.collect.HashMap;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.History;
@@ -42,9 +44,8 @@ public class QuizPage extends AbstractPage {
 	@Override
 	public Widget onInitialize() {
 		GWT.log("QuizPage:onInitialize ");
-		for (String p : getParameters()) {
-			GWT.log("p = " + p);
-		}
+		
+
 		FlexTable panel = new FlexTable();
 		panel.setWidget(1, 0, createToolbar());
 		panel.setWidget(2, 0, createQuizInfoPanel());
@@ -54,7 +55,10 @@ public class QuizPage extends AbstractPage {
 		panel.setWidget(4, 0, createBody());
 		
 		quizValidator = new QuizValidator ();
+		
 		currentQuizId = -1;
+		
+		gotoNextQuiz();
 
 		//NOTE: We have problem with unicode (d)encoding => use GWT RPC instead of RESTlet
 //		quizResource = GWT
@@ -71,7 +75,6 @@ public class QuizPage extends AbstractPage {
 //
 //	   	quizResource.getClientResource().getClientInfo().getAcceptedCharacterSets().add(new Preference<CharacterSet>(CharacterSet.DEFAULT));
 
-		gotoNextQuiz();
 		return panel;
 	}
 
@@ -387,9 +390,25 @@ public class QuizPage extends AbstractPage {
 	@Override
 	public void preRender() {
 		super.preRender();
+		
 		GWT.log("QuizPage:preRender ");
-		for (String p : getParameters()) {
-			GWT.log("p = " + p);
+
+		String id = getParameters().get("quiz_id");
+	
+		if (!isEmpty(id))
+		{
+			
+			int i = Integer.parseInt(id);
+			
+			if (i!=currentQuizId){
+				
+				currentQuizId = i;
+				GWT.log("Set CurrentQuizID for the first time currentQuizId= " + currentQuizId);
+				updateCurrentQuiz();
+			}
 		}
+		
+		GWT.log("preRender id = " + id);
+		
 	}
 }
