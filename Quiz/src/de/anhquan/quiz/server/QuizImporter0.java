@@ -25,6 +25,10 @@ public class QuizImporter0 {
 			
 			q.setPoint(4);
 			
+			q.setHint("It is also possible to change the property name bound to a constant accessor");
+			
+			q.setWhyWrong("Here is the same example using annotations to store the default values");
+			
 			q.setSubCategory("Grundstoff");
 			
 			q.setCategory("G");
@@ -79,9 +83,9 @@ public class QuizImporter0 {
 			
 			q.setCategory("G");
 			
-			q.addChoice(new Choice(new BooleanSolution(true), new TranslatedString("\u2013 bremst unerwartet","Xe ch\u1EA1y tr\u01B0\u1EDBc phanh \u0111\u1ED9t ng\u1ED9t")));
-			q.addChoice(new Choice(new BooleanSolution(true), new TranslatedString("\u2013 bet\u00E4tigt den Blinker vor dem Abbiegen zu sp\u00E4t","Xe ch\u1EA1y tr\u01B0\u1EDBc b\u1EADt \u0111\u00E8n t\u00EDn hi\u1EC7u qu\u00E1 tr\u1EC5 khi qu\u1EB9o")));
-			q.addChoice(new Choice(new BooleanSolution(true), new TranslatedString("\u2013 h\u00E4lt unerwartet an, um nach dem Weg zu fragen","Xe ch\u1EA1y tr\u01B0\u1EDBc d\u1EEBng xe \u0111\u1ED9t ng\u1ED9t \u0111\u1EC3 h\u1ECFi \u0111\u01B0\u1EDDng")));
+			q.addChoice(new Choice(new BooleanSolution(true), new TranslatedString("bremst unerwartet","Xe ch\u1EA1y tr\u01B0\u1EDBc phanh \u0111\u1ED9t ng\u1ED9t")));
+			q.addChoice(new Choice(new BooleanSolution(true), new TranslatedString("bet\u00E4tigt den Blinker vor dem Abbiegen zu sp\u00E4t","Xe ch\u1EA1y tr\u01B0\u1EDBc b\u1EADt \u0111\u00E8n t\u00EDn hi\u1EC7u qu\u00E1 tr\u1EC5 khi qu\u1EB9o")));
+			q.addChoice(new Choice(new BooleanSolution(true), new TranslatedString("h\u00E4lt unerwartet an, um nach dem Weg zu fragen","Xe ch\u1EA1y tr\u01B0\u1EDBc d\u1EEBng xe \u0111\u1ED9t ng\u1ED9t \u0111\u1EC3 h\u1ECFi \u0111\u01B0\u1EDDng")));
 			
 	    	QuizDB.addQuiz(q);
     	}
