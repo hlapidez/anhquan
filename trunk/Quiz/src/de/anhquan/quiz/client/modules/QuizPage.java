@@ -202,7 +202,7 @@ public class QuizPage extends AbstractPage {
 			image = new Image();
 			image.setVisible(true);
 
-			image.setUrl(url);
+			image.setUrl("http://laixeducviet.appspot.com/img/"+url);
 			imageHolder.add(image);
 		}
 	}

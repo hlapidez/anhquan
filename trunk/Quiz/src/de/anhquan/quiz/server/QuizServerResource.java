@@ -19,7 +19,10 @@ public class QuizServerResource extends ServerResource implements
 	@Override
 	public QuizItem getQuizItemById(Integer id) {
 		System.out.println("Goto: "+id);
-		QuizItem item = QuizDB.getQuizById(2);
+		
+		if (id<1)
+			id=1;
+		QuizItem item = QuizDB.getQuizById(id);
 		System.out.println("Goto: "+id + " - item "+item);
 		return item;
 	}
