@@ -37,9 +37,17 @@ import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import de.anhquan.quiz.client.modules.HelpPage;
+import de.anhquan.quiz.client.modules.HintPage;
+import de.anhquan.quiz.client.modules.NotePage;
 import de.anhquan.quiz.client.modules.QuizPage;
+import de.anhquan.quiz.client.modules.TestSimulationPage;
+import de.anhquan.quiz.client.modules.UserProfilePage;
+import de.anhquan.quiz.client.modules.VocabularyPage;
+import de.anhquan.quiz.client.modules.WhyWrongPage;
 import de.anhquan.quiz.client.resources.Images;
 import de.anhquan.quiz.client.resources.i18n.AppConstants;
+import de.anhquan.quiz.client.resources.i18n.AppMessages;
 import de.anhquan.quiz.client.widgets.CountryFlagButton;
 import de.anhquan.quiz.client.widgets.ThemeButton;
 
@@ -75,7 +83,12 @@ public class MainEntryPoint implements EntryPoint {
 		// Setup a history handler to reselect the associate menu item
 		final ValueChangeHandler<String> historyHandler = new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event) {
-				TreeItem item = historyTokenMap.get(event.getValue());
+				String historyToken = event.getValue();
+				String[] params = historyToken.split("&");
+				
+				//the first param is the page token
+				TreeItem item = historyTokenMap.get(params[0]);
+							
 				if (item == null) {
 					item = app.getSidebarMenu().getItem(0).getChild(0);
 				}
@@ -85,7 +98,7 @@ public class MainEntryPoint implements EntryPoint {
 				app.getSidebarMenu().ensureSelectedItemVisible();
 
 				// Show the associated ContentWidget
-				displayContentWidget(pageMap.get(item));
+				displayContentWidget(pageMap.get(item), params);
 			}
 		};
 		History.addValueChangeHandler(historyHandler);
@@ -96,7 +109,7 @@ public class MainEntryPoint implements EntryPoint {
 				TreeItem item = event.getSelectedItem();
 				AbstractPage content = pageMap.get(item);
 				if (content != null && !content.equals(app.getContent())) {
-					History.newItem(getContentWidgetToken(content));
+					History.newItem(content.getHistoryToken());
 				}
 			}
 		});
@@ -108,22 +121,20 @@ public class MainEntryPoint implements EntryPoint {
 			TreeItem firstItem = app.getSidebarMenu().getItem(0).getChild(0);
 			app.getSidebarMenu().setSelectedItem(firstItem, false);
 			app.getSidebarMenu().ensureSelectedItemVisible();
-			displayContentWidget(pageMap.get(firstItem));
+			AbstractPage firstPage = pageMap.get(firstItem);
+			displayContentWidget(firstPage, new String[]{firstPage.getHistoryToken()});
 		}
 	}
 
 
-	private void displayContentWidget(AbstractPage content) {
+	private void displayContentWidget(AbstractPage content, String[] params) {
 		if (content != null) {
+			content.setParameters(params);
+			content.preRender();
 			app.setContentArea(content);
 			app.setContentTitle(content.getTabBar());
+			content.postRender();
 		}
-	}
-
-	private String getContentWidgetToken(AbstractPage content) {
-		String className = content.getClass().getName();
-		className = className.substring(className.lastIndexOf('.') + 1);
-		return className;
 	}
 
 	private String getCurrentReferenceStyleName(String prefix) {
@@ -154,9 +165,23 @@ public class MainEntryPoint implements EntryPoint {
 	private void setupSidebarMenu() {
 		Tree sidebarMenu = app.getSidebarMenu();
 		
-		TreeItem menuDemo = createMenuRootItem(sidebarMenu, AppConstants.INST.menuDemo());
-		addMenuItem(menuDemo, new QuizPage());
+		TreeItem menuDocument = createMenuRootItem(sidebarMenu, AppMessages.INST.menuDocument());
+		addMenuItem(menuDocument, new QuizPage());
 		
+		addMenuItem(menuDocument, new TestSimulationPage());
+		
+		addMenuItem(menuDocument, new NotePage());
+		
+		addMenuItem(menuDocument, new HintPage());
+		
+		addMenuItem(menuDocument, new WhyWrongPage());
+		
+		addMenuItem(menuDocument, new VocabularyPage());
+		
+		addMenuItem(menuDocument, new HelpPage());
+		
+		TreeItem menuSettings = createMenuRootItem(sidebarMenu, AppMessages.INST.menuSettings());
+		addMenuItem(menuSettings, new UserProfilePage());
 		//sidebarMenu.setVisible(false);
 		
 	}
@@ -178,7 +203,7 @@ public class MainEntryPoint implements EntryPoint {
 
 		// Map the item to its history token and content widget
 		pageMap.put(option, page);
-		historyTokenMap.put(getContentWidgetToken(page), option);
+		historyTokenMap.put(page.getHistoryToken(), option);
 	}
 
 	/**

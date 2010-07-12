@@ -52,4 +52,38 @@ public interface AppMessages extends Messages{
 	@DefaultMessage ("There is no hint")
 	String emptyHint();
 	
+	//menus
+	@DefaultMessage ("Settings")
+	String menuSettings ();
+	
+	@DefaultMessage ("Document")
+	String menuDocument();
+	
+	//pages
+	
+	@DefaultMessage ("Help")
+	String pageHelp ();
+	
+	@DefaultMessage ("Training")
+	String pageTraining ();
+	
+	@DefaultMessage ("Test Simulation")
+	String pageTestSimulation ();
+	
+	
+	@DefaultMessage ("Hints")
+	String pageHints ();
+	
+	@DefaultMessage ("Notes")
+	String pageNotes ();
+	
+	@DefaultMessage ("Vocabulary")
+	String pageVocabulary ();
+	
+	@DefaultMessage ("Why wrong?")
+	String pageWhyWrong ();
+	
+	@DefaultMessage ("User Profile")
+	String pageUserProfile ();
+	
 }

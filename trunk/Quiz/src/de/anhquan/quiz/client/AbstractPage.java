@@ -4,13 +4,17 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.LazyPanel;
 import com.google.gwt.user.client.ui.TabBar;
+import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -164,4 +168,30 @@ public abstract class AbstractPage extends LazyPanel implements SelectionHandler
 	public String getMenuTitle() {
 		return this.getMenuIconHTML() + " " + this.getName();
 	}
+
+	public String getHistoryToken() {
+		String className = this.getClass().getName();
+		className = className.substring(className.lastIndexOf('.') + 1);
+		return className;
+	}
+
+	String[] params;
+	public void setParameters(String[] params) {
+		this.params = params;
+	}
+	
+	public String[] getParameters(){
+		return this.params;
+	}
+
+	public void preRender() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void postRender() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }
