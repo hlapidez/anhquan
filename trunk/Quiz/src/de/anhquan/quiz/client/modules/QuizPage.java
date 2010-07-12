@@ -141,6 +141,13 @@ public class QuizPage extends AbstractPage {
 	ToolTip hint;
 	ToolTip whyWrong;
 	ToolTip note;
+	
+	private void addNewHistoryToken(){
+		if (currentQuizId>0)
+			History.newItem(this.getHistoryToken()+"&quiz_id="+currentQuizId);
+		else
+			History.newItem(this.getHistoryToken());
+	}
 
 	public void showQuiz(QuizItem result) {
 		quiz = result;
@@ -154,7 +161,7 @@ public class QuizPage extends AbstractPage {
 
 		// status
 		currentQuizId = quiz.getId();
-		History.newItem(this.getHistoryToken()+"&quiz_id="+currentQuizId);
+		addNewHistoryToken();
 		
 		int quizCount = quiz.getInfo().getQuizCount();
 		btPrev.setEnabled(currentQuizId > 0);
@@ -407,7 +414,12 @@ public class QuizPage extends AbstractPage {
 				updateCurrentQuiz();
 			}
 		}
-		
+		else{
+			if (currentQuizId>0){
+				addNewHistoryToken();
+			}
+		}
+	
 		GWT.log("preRender id = " + id);
 		
 	}
