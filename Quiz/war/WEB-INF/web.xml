@@ -4,17 +4,29 @@
 	<welcome-file-list>
 		<welcome-file>Quiz.html</welcome-file>
 	</welcome-file-list>
-<!-- 
+	<!-- <servlet> <servlet-name>remoteLoggingService</servlet-name> <servlet-class>com.google.gwt.gen2.logging.server.RemoteLoggingService 
+		</servlet-class> </servlet> <servlet-mapping> <servlet-name>remoteLoggingService</servlet-name> 
+		<url-pattern>/Quiz/logging</url-pattern> </servlet-mapping> -->
+
+
 	<servlet>
-		<servlet-name>remoteLoggingService</servlet-name>
-		<servlet-class>com.google.gwt.gen2.logging.server.RemoteLoggingService
-		</servlet-class>
+		<servlet-name>quizServiceImpl</servlet-name>
+		<servlet-class>de.anhquan.quiz.server.QuizServiceImpl</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>remoteLoggingService</servlet-name>
-		<url-pattern>/Quiz/logging</url-pattern>
+		<servlet-name>quizServiceImpl</servlet-name>
+		<url-pattern>/Quiz/quizrpc</url-pattern>
 	</servlet-mapping>
- -->
+	
+	<servlet>
+		<servlet-name>staticContentServiceImpl</servlet-name>
+		<servlet-class>de.anhquan.quiz.server.StaticContentServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>staticContentServiceImpl</servlet-name>
+		<url-pattern>/Quiz/staticrpc</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>remoteLoggingServiceImpl</servlet-name>
 		<servlet-class>com.google.gwt.libideas.logging.server.RemoteLoggingServiceImpl
