@@ -221,7 +221,33 @@
 	font-size: 1.25em;
 }
 
-.Notification-Panel{
+.notification{
 	padding: 10px;
 	font-weight: bold;
+}
+
+
+.notification-answer-correct{
+	color: green;	
+}
+
+.notification-answer-incorrect{
+	color: red;
+}
+
+.notification-error {	
+	color: blue;	
+}
+
+.notification-failure {	
+	color: blue;	
+}
+
+
+.notification-hint {	
+	color: #CACA00;	
+}
+
+.notification-blank {	
+	color: white;	
 }

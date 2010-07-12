@@ -36,6 +36,8 @@
 	<!-- gecko,gecko1_8, ie6, opera, safari -->
 	<!-- Only use Chrome in development -->
 	<set-property name="user.agent" value="gecko1_8" />
+	
+	<servlet path="/quizrpc" class="de.anhquan.quiz.server.QuizServiceImpl" />
 
 	<source path='client' />
 	<source path='shared' />

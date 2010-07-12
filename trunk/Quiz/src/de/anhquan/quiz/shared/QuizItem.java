@@ -20,7 +20,7 @@ public class QuizItem implements Serializable {
     
     private String category;
     
-    private String subCategory;
+    private String subCategory;    
 
     private List<Choice> choices;
     
@@ -29,6 +29,10 @@ public class QuizItem implements Serializable {
     private int id;
     
     private QuizInfo info;
+    
+    private String hint;
+    
+    private String whyWrong;
 
     public QuizItem() {
     	this(TranslatedString.EMPTY,"",0);
@@ -132,6 +136,22 @@ public class QuizItem implements Serializable {
 
 	public void setInfo(QuizInfo info) {
 		this.info = info;
+	}
+
+	public String getHint() {
+		return hint;
+	}
+
+	public void setHint(String hint) {
+		this.hint = hint;
+	}
+
+	public String getWhyWrong() {
+		return whyWrong;
+	}
+
+	public void setWhyWrong(String whyWrong) {
+		this.whyWrong = whyWrong;
 	}
 	
 }
