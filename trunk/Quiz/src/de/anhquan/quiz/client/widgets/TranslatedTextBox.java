@@ -48,13 +48,19 @@ public class TranslatedTextBox extends HorizontalPanel {
 			afterPart.setHTML("");		
 		}			
 	}
-	
-	public void showSolution(String solutionText, boolean isCorrect) {
-		solution.setHTML("<strong>Solution:</strong> "+solutionText);
-		solution.showRelativeTo(answerTextBox);
-	}
 
 	public String getValue() {
 		return answerTextBox.getValue();
+	}
+
+	/**
+	 * 
+	 * @param showText has no effect in this implementation
+	 * @param solutionText
+	 * @param isCorrect
+	 */
+	public void showSolution(boolean showText, String solutionText, boolean isCorrect) {
+		solution.setHTML("<strong>Solution:</strong> "+solutionText);
+		solution.showRelativeTo(answerTextBox);
 	}
 }

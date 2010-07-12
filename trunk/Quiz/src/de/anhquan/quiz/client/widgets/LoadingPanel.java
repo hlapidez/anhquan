@@ -5,6 +5,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
 import de.anhquan.quiz.client.resources.Images;
+import de.anhquan.quiz.client.resources.i18n.AppMessages;
 
 public class LoadingPanel extends HorizontalPanel {
 
@@ -17,11 +18,21 @@ public class LoadingPanel extends HorizontalPanel {
 		loadingIcon = new Image(Images.INST.loadingIcon());
 		add(loadingIcon);
 		add(loadingMsg);
+		clear();
 	}
 
-	public void setLoading(boolean busy, String text) {
-		loadingIcon.setVisible(busy);
+	public void setBusy(String text){
+		loadingIcon.setVisible(true);
 		loadingMsg.setText(text);
+	}
+	
+	public void setBusy(){
+		setBusy(AppMessages.INST.loading());
+	}
+	
+	public void clear(){
+		loadingIcon.setVisible(false);
+		loadingMsg.setText("");
 	}
 
 }

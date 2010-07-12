@@ -2,27 +2,28 @@ package de.anhquan.quiz.client.modules;
 
 import java.util.List;
 
-import org.restlet.client.data.MediaType;
-import org.restlet.client.data.Preference;
-import org.restlet.client.resource.Result;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import de.anhquan.quiz.client.AbstractPage;
-import de.anhquan.quiz.client.resources.Images;
+import de.anhquan.quiz.client.resources.i18n.AppMessages;
+import de.anhquan.quiz.client.widgets.LoadingPanel;
+import de.anhquan.quiz.client.widgets.NotificationPanel;
+import de.anhquan.quiz.client.widgets.NotificationPanel.MessageType;
+import de.anhquan.quiz.client.widgets.ToolTip;
 import de.anhquan.quiz.client.widgets.TranslatedCheckBox;
 import de.anhquan.quiz.client.widgets.TranslatedLabel;
 import de.anhquan.quiz.client.widgets.TranslatedTextBox;
@@ -43,30 +44,43 @@ public class QuizPage extends AbstractPage {
 		FlexTable panel = new FlexTable();
 		panel.setWidget(1, 0, createHeader());
 		panel.setWidget(2, 0, createQuizInfoPanel());
-		panel.setWidget(3, 0, createNotificationPanel());
+		
+		notification = new NotificationPanel();
+		panel.setWidget(3, 0, notification);
 		panel.setWidget(4, 0, createBody());
 		
-
 		quizValidator = new QuizValidator ();
 		currentQuizId = -1;
-		
-		quizResource = GWT
-        .create(QuizResourceProxy.class);
-        quizResource.getClientResource().setReference("/quiz");
-	   	 quizResource.getClientResource().getClientInfo()
-	        .getAcceptedMediaTypes().add(
-	                new Preference<MediaType>(
-	                        MediaType.APPLICATION_JAVA_OBJECT_GWT));
 
+		//NOTE: We have problem with unicode (d)encoding => use GWT RPC instead of RESTlet
+//		quizResource = GWT
+//        .create(QuizResourceProxy.class);
+//        quizResource.getClientResource().setReference("/quiz");
+//	   	quizResource.getClientResource().getClientInfo()
+//	        .getAcceptedMediaTypes().add(
+//	                new Preference<MediaType>(
+//	                        MediaType.APPLICATION_JAVA_OBJECT_GWT));
+//
+//	   	quizResource.getClientResource().getClientInfo().getAcceptedCharacterSets().clear();
+//	   	quizResource.getClientResource().getClientInfo().getAcceptedCharacterSets().add(new Preference<CharacterSet>(new CharacterSet(
+//	            "ISO-8859-12", "ISO/IEC 8859-12 or Latin 7 character set")));
+//
+//	   	quizResource.getClientResource().getClientInfo().getAcceptedCharacterSets().add(new Preference<CharacterSet>(CharacterSet.DEFAULT));
+
+	   	quizSrv = GWT.create(QuizService.class);
+		((ServiceDefTarget) quizSrv).setServiceEntryPoint(GWT.getModuleBaseURL() + "quizrpc");
+		
 		gotoNextQuiz();
 		return panel;
 	}
 
 	int currentQuizId;
 	QuizResourceProxy quizResource;
-
+	QuizServiceAsync quizSrv = null;
+	
 	private void prepareToChangeQuiz() {
-		setLoading(true, "Loading ...");
+		notification.clear();
+		loadingPanel.setBusy();
 		btNext.setEnabled(false);
 		btPrev.setEnabled(false);
 	}
@@ -74,22 +88,37 @@ public class QuizPage extends AbstractPage {
 	private void updateCurrentQuiz(){
 		prepareToChangeQuiz();
 		quizContent.setVisible(false);
-		
-	   	quizResource.getQuizItemById(currentQuizId, new Result<QuizItem>() {
+		quizSrv.getQuizById(currentQuizId, new AsyncCallback<QuizItem>() {
 			
 			@Override
 			public void onSuccess(QuizItem result) {
 				QuizPage.this.showQuiz(result);
-				setLoading(false, "");
+				loadingPanel.clear();
 			}
 			
 			@Override
 			public void onFailure(Throwable caught) {
-				caught.printStackTrace();
-				setNotification("Throwable: "+caught.getMessage());
-				setLoading(false, "");
+				notification.setMessage(MessageType.ERROR, "Throwable: "+caught.getMessage());
+				loadingPanel.clear();
 			}
 		});
+		
+// Use RESTlet (but have problem with Unicode (de)encoding		
+//	   	quizResource.getQuizItemById(currentQuizId, new Result<QuizItem>() {
+//			
+//			@Override
+//			public void onSuccess(QuizItem result) {
+//				QuizPage.this.showQuiz(result);
+//				setLoading(false, "");
+//			}
+//			
+//			@Override
+//			public void onFailure(Throwable caught) {
+//				caught.printStackTrace();
+//				notification.setMessage("Throwable: "+caught.getMessage());
+//				setLoading(false, "");
+//			}
+//		});
 	}
 
 	public void gotoNextQuiz() {
@@ -106,9 +135,7 @@ public class QuizPage extends AbstractPage {
 	TranslatedLabel question;
 	TranslatedLabel answerHeader;
 	Panel imageHolder;
-	Label loadingMsg;
-	Panel loadingPanel;
-	Image loadingIcon;
+	LoadingPanel loadingPanel;
 	
 	QuizItem quiz = null;
 	private QuizValidator quizValidator;
@@ -119,6 +146,12 @@ public class QuizPage extends AbstractPage {
 	Button btPrev;
 	Button btNext;
 	Button btAnswer;
+	Button btSolution;
+	Button btHint;
+	Button btWhyWrong;
+	
+	ToolTip hint;
+	ToolTip whyWrong;
 
 	public void showQuiz(QuizItem result) {
 		quiz = result;
@@ -138,7 +171,6 @@ public class QuizPage extends AbstractPage {
 		btAnswer.setEnabled(true);
 		
 		// common
-		setNotification("");
 		question.setContent(quiz.getText());
 
 		// image
@@ -174,18 +206,29 @@ public class QuizPage extends AbstractPage {
 			}
 		}
 		
+		//hint
+		txt = quiz.getHint();
+		if (isEmpty(txt))
+			hint.setHTML("");
+		else
+			hint.setHTML(txt);
+		GWT.log("hint: "+txt);
+		
+		//whyWrong
+		txt = quiz.getWhyWrong();
+		if (isEmpty(txt))
+			whyWrong.setHTML("");
+		else
+			whyWrong.setHTML(txt);
+		GWT.log("whyWrong: "+txt);
 	}
 
 	private boolean isEmpty(String txt) {
 		return (txt==null) || (txt.length()==0);
 	}
 
-	private HTML notification;
+	private NotificationPanel notification;
 	private HTML txtQuestionInfo;
-
-	private void setNotification(String text) {
-		notification.setHTML(text);
-	}
 
 	private void updateImage(String url) {
 		imageHolder.setVisible(false);
@@ -226,34 +269,20 @@ public class QuizPage extends AbstractPage {
 		txtQuestionInfo.setHTML(html);
 	}
 
-
-	private Widget createNotificationPanel() {
-		// notification
-		Panel panel = new HorizontalPanel();
-		
-		notification = new HTML();
-		notification.setStyleName("Notification-Panel");
-		
-		panel.add(notification);
-		return panel;
-	}
-
 	protected void validateAnswer() {
 
 		if (quiz == null) {
-			setNotification("Please select a question first!");
+			notification.setMessage(MessageType.HINT, "Please select a question first!");
 		}
 		else{
 			if (quizValidator.validate()){
-				setNotification("Congratulation!");
+				notification.congratulate();
 			}
 			else{
-				setNotification("Dont give it up. You will do it right next time!");
+				notification.saySorry();
 			}
 		}
-
 	}
-
 
 	private Widget createBody() {
 		quizContent = new VerticalPanel();
@@ -273,14 +302,14 @@ public class QuizPage extends AbstractPage {
 
 	private Widget createHeader() {
 		Panel header = new HorizontalPanel();
-		btNext = new Button("Next");
+		btNext = new Button(AppMessages.INST.btNext());
 		btNext.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				gotoNextQuiz();
 			}
 		});
-		btPrev = new Button("Previous");
+		btPrev = new Button(AppMessages.INST.btPrevious());
 		btPrev.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -289,7 +318,7 @@ public class QuizPage extends AbstractPage {
 			}
 		});
 
-		btAnswer = new Button("Answer");
+		btAnswer = new Button(AppMessages.INST.btAnswer());
 		btAnswer.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -298,30 +327,69 @@ public class QuizPage extends AbstractPage {
 			}
 		});
 		
+		btSolution = new Button(AppMessages.INST.btSolution());
+		btSolution.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				showSolution();
+			}
+		});
+		
+		hint = new ToolTip();
+		btHint = new Button(AppMessages.INST.btHint());
+		btHint.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+//				if (hint.isVisible())
+//					hint.hide();
+//				else
+				GWT.log("Show hint");
+					hint.showRelativeTo(btHint);
+			}
+		});
+		
+		whyWrong = new ToolTip();
+		btWhyWrong = new Button(AppMessages.INST.btWhyWrong());
+		btWhyWrong.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+//				if (whyWrong.isVisible())
+//					whyWrong.hide();
+//				else
+				GWT.log("Show whywrong");
+					whyWrong.showRelativeTo(btWhyWrong);
+			}
+		});
+		
 		CheckBox cbMark = new CheckBox("Remember it!");
 		
 		header.add(btPrev);
 		header.add(btNext);
+		header.add(btHint);
+		header.add(btWhyWrong);
+		header.add(btSolution);
 		header.add(btAnswer);
 		header.add(cbMark);
 
-
-
-		loadingPanel = new HorizontalPanel();
-		loadingMsg = new Label("");
-		loadingIcon = new Image(Images.INST.loadingIcon());
-		loadingPanel.add(loadingIcon);
-		loadingPanel.add(loadingMsg);
-		setLoading(false, "");
-
+		loadingPanel = new LoadingPanel();
+		
 		header.add(loadingPanel);
 
 		return header;
 	}
 
-	private void setLoading(boolean busy, String text) {
-		loadingIcon.setVisible(busy);
-		loadingMsg.setText(text);
+	protected void showWhyWrong() {
+		
+		
+	}
+
+	protected void showHint() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	protected void showSolution() {
+		quizValidator.showSolution();
 	}
 
 }
