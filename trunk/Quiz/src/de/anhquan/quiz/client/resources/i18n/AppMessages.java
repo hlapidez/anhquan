@@ -39,4 +39,17 @@ public interface AppMessages extends Messages{
 	
 	@DefaultMessage ("Why wrong?")
 	String btWhyWrong();
+	
+	@DefaultMessage ("Note")
+	String btNote();
+	
+	@DefaultMessage ("There is no note")
+	String emptyNote();
+	
+	@DefaultMessage ("Sorry. No one updates it")
+	String emptyWhyWrong();
+	
+	@DefaultMessage ("There is no hint")
+	String emptyHint();
+	
 }

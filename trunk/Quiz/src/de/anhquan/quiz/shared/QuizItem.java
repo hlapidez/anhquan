@@ -6,73 +6,73 @@ import java.util.List;
 
 public class QuizItem implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
 	public static final String TEXT_INPUT_SEPARATOR = "___";
 
-    private TranslatedString text = TranslatedString.EMPTY;
-    
-    private TranslatedString answerHeader = TranslatedString.EMPTY;
+	private TranslatedString text = TranslatedString.EMPTY;
 
-    private String name;
-    
-    private String image;
-    
-    private String category;
-    
-    private String subCategory;    
+	private TranslatedString answerHeader = TranslatedString.EMPTY;
 
-    private List<Choice> choices;
-    
-    private int point;
+	private String name;
 
-    private int id;
-    
-    private QuizInfo info;
-    
-    private String hint;
-    
-    private String whyWrong;
+	private String image;
 
-    public QuizItem() {
-    	this(TranslatedString.EMPTY,"",0);
-    }
+	private String category;
 
-    public QuizItem(TranslatedString answerHeader, String name,
-            int point) {
-        super();
-        this.answerHeader = answerHeader;
-        this.name = name;
-        this.point = point;
-        choices = new ArrayList<Choice>();
-        info = new QuizInfo();
-        
-    }
+	private String subCategory;
 
-    public int getPoint() {
-        return point;
-    }
+	private List<Choice> choices;
+
+	private int point;
+
+	private int id;
+
+	private QuizInfo info;
+
+	private String hint;
+
+	private String whyWrong;
+
+	private String note;
+
+	public QuizItem() {
+		this(TranslatedString.EMPTY, "", 0);
+	}
+
+	public QuizItem(TranslatedString answerHeader, String name, int point) {
+		super();
+		this.answerHeader = answerHeader;
+		this.name = name;
+		this.point = point;
+		choices = new ArrayList<Choice>();
+		info = new QuizInfo();
+
+	}
+
+	public int getPoint() {
+		return point;
+	}
 
 	public TranslatedString getAnswerHeader() {
-        return answerHeader;
-    }
+		return answerHeader;
+	}
 
+	public String getName() {
+		return name;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setPoint(int point) {
+		this.point = point;
+	}
 
-    public void setPoint(int point) {
-        this.point = point;
-    }
+	public void setAnswerHeader(TranslatedString header) {
+		this.answerHeader = header;
+	}
 
-    public void setAnswerHeader(TranslatedString header) {
-        this.answerHeader = header;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public TranslatedString getText() {
 		return text;
@@ -121,12 +121,12 @@ public class QuizItem implements Serializable {
 	public void setChoices(List<Choice> choices) {
 		this.choices = choices;
 	}
-	
-	public void addChoice(Choice choice){
+
+	public void addChoice(Choice choice) {
 		this.choices.add(choice);
 	}
-	
-	public void removeChoice(Choice choice){
+
+	public void removeChoice(Choice choice) {
 		this.choices.remove(choice);
 	}
 
@@ -153,5 +153,13 @@ public class QuizItem implements Serializable {
 	public void setWhyWrong(String whyWrong) {
 		this.whyWrong = whyWrong;
 	}
-	
+
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
 }

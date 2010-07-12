@@ -24,7 +24,7 @@ public class QuizValidator {
 	public abstract class SimpleValidator{
 		public abstract boolean validate();
 		
-		public abstract void showSolution();
+		public abstract void showSolution(boolean showText);
 	}
 
 	public class BooleanValidator extends SimpleValidator{
@@ -46,8 +46,8 @@ public class QuizValidator {
 		}
 
 		@Override
-		public void showSolution() {
-			checkbox.showSolution(solution.getValue(),isCorrect);
+		public void showSolution(boolean showText) {
+			checkbox.showSolution(showText, solution.getValue(),isCorrect);
 		}
 		
 	}
@@ -70,8 +70,8 @@ public class QuizValidator {
 		}
 
 		@Override
-		public void showSolution() {
-			answerBox.showSolution(solution.getValue(), isCorrect);
+		public void showSolution(boolean showText) {
+			answerBox.showSolution(showText, solution.getValue(), isCorrect);
 		}
 		
 	}
@@ -93,9 +93,15 @@ public class QuizValidator {
 		for (SimpleValidator v : simpleValidators) {
 			boolean isCorrect = v.validate();
 			total = total && isCorrect;
-			v.showSolution();
+			v.showSolution(true);
 		}
 		
 		return total;
+	}
+	
+	public void showSolution(){
+		for (SimpleValidator v : simpleValidators) {
+			v.showSolution(false);
+		}
 	}
 }

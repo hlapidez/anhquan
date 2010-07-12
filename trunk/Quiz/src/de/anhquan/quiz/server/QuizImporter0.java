@@ -29,13 +29,15 @@ public class QuizImporter0 {
 			
 			q.setWhyWrong("Here is the same example using annotations to store the default values");
 			
+			q.setNote("This works for UTF-8 like for any other supported encoding, as long as the appropriate locale has been selected");
+			
 			q.setSubCategory("Grundstoff");
 			
 			q.setCategory("G");
 			
 			q.addChoice(new Choice(new BooleanSolution(true), new TranslatedString("Nicht auf dem eigenen Recht bestehen","Kh\u00F4ng v\u1EADn d\u1EE5ng c\u1EE9ng nh\u1EAFc c\u00E1c quy\u1EC1n m\u00E0 lu\u1EADt giao th\u00F4ng \u00E1p d\u1EE5ng m\u00ECnh")));
 			q.addChoice(new Choice(new BooleanSolution(true), new TranslatedString("Mit Fehlern anderer rechnen","T\u00EDnh to\u00E1n \u0111\u1EBFn sai l\u1EA7m c\u1EE7a ng\u01B0\u1EDDi l\u00E1i xe kh\u00E1c")));
-				q.addChoice(new Choice(new BooleanSolution(false), new TranslatedString("Vorsorglich an jeder Kreuzung anhalten","Th\u1EADn tr\u1ECDng d\u1EEBng \u1EDF c\u00E1c giao l\u1ED9")));
+			q.addChoice(new Choice(new BooleanSolution(false), new TranslatedString("Vorsorglich an jeder Kreuzung anhalten","Th\u1EADn tr\u1ECDng d\u1EEBng \u1EDF c\u00E1c giao l\u1ED9")));
 				
 	    	QuizDB.addQuiz(q);
     	}
