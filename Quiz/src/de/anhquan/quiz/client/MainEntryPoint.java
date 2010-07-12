@@ -135,6 +135,16 @@ public class MainEntryPoint implements EntryPoint {
 	}
 
 	private void createTopLinks() {
+		Anchor anchorLearn = new Anchor("Learn");
+		anchorLearn.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+			
+			}
+		});
+		
+		app.addTopLink(anchorLearn);
 		app.addTopLink(new Anchor("Help"));
 		app.addTopLink(new Anchor("Privacy"));
 		app.addTopLink(new Anchor("Settings"));
@@ -146,6 +156,8 @@ public class MainEntryPoint implements EntryPoint {
 		
 		TreeItem menuDemo = createMenuRootItem(sidebarMenu, AppConstants.INST.menuDemo());
 		addMenuItem(menuDemo, new QuizPage());
+		
+		//sidebarMenu.setVisible(false);
 		
 	}
 	

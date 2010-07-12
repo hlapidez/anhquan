@@ -42,7 +42,7 @@ public class QuizPage extends AbstractPage {
 	@Override
 	public Widget onInitialize() {
 		FlexTable panel = new FlexTable();
-		panel.setWidget(1, 0, createHeader());
+		panel.setWidget(1, 0, createToolbar());
 		panel.setWidget(2, 0, createQuizInfoPanel());
 		
 		notification = new NotificationPanel();
@@ -149,9 +149,11 @@ public class QuizPage extends AbstractPage {
 	Button btSolution;
 	Button btHint;
 	Button btWhyWrong;
+	Button btNote;
 	
 	ToolTip hint;
 	ToolTip whyWrong;
+	ToolTip note;
 
 	public void showQuiz(QuizItem result) {
 		quiz = result;
@@ -208,19 +210,18 @@ public class QuizPage extends AbstractPage {
 		
 		//hint
 		txt = quiz.getHint();
-		if (isEmpty(txt))
-			hint.setHTML("");
-		else
-			hint.setHTML(txt);
-		GWT.log("hint: "+txt);
+		if (isEmpty(txt)) txt = AppMessages.INST.emptyHint();
+		hint.setHTML(txt);
 		
 		//whyWrong
 		txt = quiz.getWhyWrong();
-		if (isEmpty(txt))
-			whyWrong.setHTML("");
-		else
-			whyWrong.setHTML(txt);
-		GWT.log("whyWrong: "+txt);
+		if (isEmpty(txt)) txt = AppMessages.INST.emptyWhyWrong();
+		whyWrong.setHTML(txt);
+		
+		//note
+		txt = quiz.getNote();
+		if (isEmpty(txt)) txt = AppMessages.INST.emptyNote();
+		note.setHTML(txt);
 	}
 
 	private boolean isEmpty(String txt) {
@@ -300,8 +301,8 @@ public class QuizPage extends AbstractPage {
 		return quizContent;
 	}
 
-	private Widget createHeader() {
-		Panel header = new HorizontalPanel();
+	private Widget createToolbar() {
+		Panel toolbar = new HorizontalPanel();
 		btNext = new Button(AppMessages.INST.btNext());
 		btNext.addClickHandler(new ClickHandler() {
 			@Override
@@ -340,9 +341,6 @@ public class QuizPage extends AbstractPage {
 		btHint.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-//				if (hint.isVisible())
-//					hint.hide();
-//				else
 				GWT.log("Show hint");
 					hint.showRelativeTo(btHint);
 			}
@@ -353,29 +351,37 @@ public class QuizPage extends AbstractPage {
 		btWhyWrong.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-//				if (whyWrong.isVisible())
-//					whyWrong.hide();
-//				else
 				GWT.log("Show whywrong");
 					whyWrong.showRelativeTo(btWhyWrong);
 			}
 		});
 		
+		note = new ToolTip();
+		btNote = new Button(AppMessages.INST.btNote());
+		btNote.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				GWT.log("Show note");
+				note.showRelativeTo(btNote);
+			}
+		});
+		
 		CheckBox cbMark = new CheckBox("Remember it!");
 		
-		header.add(btPrev);
-		header.add(btNext);
-		header.add(btHint);
-		header.add(btWhyWrong);
-		header.add(btSolution);
-		header.add(btAnswer);
-		header.add(cbMark);
+		toolbar.add(btPrev);
+		toolbar.add(btNext);
+		toolbar.add(btNote);		
+		toolbar.add(btWhyWrong);
+		toolbar.add(btHint);
+		toolbar.add(btSolution);
+		toolbar.add(btAnswer);
+		toolbar.add(cbMark);
 
 		loadingPanel = new LoadingPanel();
 		
-		header.add(loadingPanel);
-
-		return header;
+		toolbar.add(loadingPanel);
+		
+		return toolbar;
 	}
 
 	protected void showWhyWrong() {
