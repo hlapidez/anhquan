@@ -46,13 +46,17 @@ public class TranslatedCheckBox extends HorizontalPanel {
 	public CheckBox getCheckBox (){
 		return cbAnswer;
 	}
-	
-	public void showSolution(boolean value, boolean isCorrect) {
-		solutionPanel.setVisible(true);
-		cbSolution.setValue(value);
-		if (isCorrect)
-			feedback.setText("Correct");
+
+	public void showSolution(boolean showText, boolean value, boolean isCorrect) {
+		if (showText){
+			solutionPanel.setVisible(true);
+			cbSolution.setValue(value);
+			if (isCorrect)
+				feedback.setText("Correct");
+			else
+				feedback.setText("Wrong");
+		}
 		else
-			feedback.setText("Wrong");
+			cbAnswer.setValue(value);
 	}
 }

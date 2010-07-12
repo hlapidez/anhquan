@@ -16,12 +16,9 @@
 package de.anhquan.quiz.client.resources.i18n;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.i18n.client.Constants;
+import com.google.gwt.i18n.client.ConstantsWithLookup;
 
-/**
- * Constants used throughout the showcase.
- */
-public interface AppConstants extends Constants {
+public interface AppConstants extends ConstantsWithLookup   {
 
 	public static final AppConstants INST = (AppConstants) GWT.create(AppConstants.class);
 	/**
