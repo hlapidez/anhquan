@@ -39,12 +39,13 @@ public class QuizPage extends AbstractPage {
 
 	public QuizPage() {
 		setName(AppMessages.INST.pageTraining());
+		isInitialized = false;
+		currentQuizId = -1;
 	}
 
 	@Override
 	public Widget onInitialize() {
 		GWT.log("QuizPage:onInitialize ");
-		
 
 		FlexTable panel = new FlexTable();
 		panel.setWidget(1, 0, createToolbar());
@@ -56,9 +57,12 @@ public class QuizPage extends AbstractPage {
 		
 		quizValidator = new QuizValidator ();
 		
-		currentQuizId = -1;
+		isInitialized = true;
 		
-		gotoNextQuiz();
+		if (currentQuizId == -1)
+			gotoNextQuiz();
+		else
+			updateCurrentQuiz();
 
 		//NOTE: We have problem with unicode (d)encoding => use GWT RPC instead of RESTlet
 //		quizResource = GWT
@@ -80,6 +84,7 @@ public class QuizPage extends AbstractPage {
 
 	int currentQuizId;
 	QuizResourceProxy quizResource;
+	boolean isInitialized;
 	
 	private void prepareToChangeQuiz() {
 		notification.clear();
@@ -411,7 +416,10 @@ public class QuizPage extends AbstractPage {
 				
 				currentQuizId = i;
 				GWT.log("Set CurrentQuizID for the first time currentQuizId= " + currentQuizId);
-				updateCurrentQuiz();
+				
+				
+				if (isInitialized)
+					updateCurrentQuiz();
 			}
 		}
 		else{
