@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/lbPrefixText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/prefix_text" />
+
+    <EditText
+        android:id="@+id/txtPrefixText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" >
+        <requestFocus />
+    </EditText>
+    
+    <TextView
+        android:id="@+id/lbPhoneNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/my_phone_number" />
+    
+     <EditText
+        android:id="@+id/txtMyPhoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" >
+        <requestFocus />
+    </EditText>
+    
+ 	<TextView
+        android:id="@+id/lbTextColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_color" />
+    
+  	<TextView
+        android:id="@+id/lbBgColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/background_color" />
+  	
+    <CheckBox
+        android:id="@+id/chPrefixTextVisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/prefix_text_visible" />
+    
+    <CheckBox
+        android:id="@+id/chBackgroundTransparent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/background_transparent" />
+
+    <Button
+        android:id="@+id/configureButtonOk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="click"
+        android:text="@string/apply" />
+
+</LinearLayout>

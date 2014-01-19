@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="pref_looknfeel_settings"
+        android:title="Look and Feel" >
+        <EditTextPreference android:key="pref_font_size" android:title="Font Size"/>
+        <EditTextPreference android:key="pref_text_color" android:title="Text Color" android:summary="e.g. #caca00"/>
+        <EditTextPreference android:key="pref_background_color" android:title="Background Color" android:summary="e.g. #000000"/>
+        <CheckBoxPreference android:title="Background Transparent" android:key="pref_background_transparent"/>
+        <CheckBoxPreference android:title="Prefix visibble" android:key="pref_prefix_visible"/>
+        <EditTextPreference android:key="pref_prefix" android:title="Prefix"/>
+        
+        
+        
+    </PreferenceCategory>
+    <PreferenceCategory android:key="pref_general_settings" android:title="General Settings">
+        <EditTextPreference android:key="pref_my_phone_number" android:title="My Phone Number" android:summary="In some cases you may need to enter your phone number manually"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

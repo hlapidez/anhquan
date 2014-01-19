@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thank you for installing the MyTelephoneNumber Widget.
+        \n\nPlease read these important instructions.\n\nThis is a widget, not a regular application. 
+        Unlike regular applications, widgets are placed on the home screen and offer information at a glance. 
+        Long press to home screen to add the widget to screen." />
+
+   
+
+</LinearLayout>
